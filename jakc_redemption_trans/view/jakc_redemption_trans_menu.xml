@@ -1,0 +1,5 @@
+<odoo>
+    <data>        
+        <menuitem id="rdm_promo_trans_menu" name="Transaction" parent="base.rdm_promo_menu" action="action_rdm_promo_trans" sequence="3"/>
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<record forcecreate="True" id="ir_cron_customer_blast_action" model="ir.cron">
+			<field name="name">Customer Blast Scheduler</field>
+			<field name="active">True</field>
+			<field name="user_id">1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">minutes</field>
+			<field name="numbercall">-1</field>
+			<field name="doall">False</field>
+			<field name="model">rdm.schemas</field>
+			<field name="function">start_blast</field>
+		</record>
+		
+		<record forcecreate="True" id="ir_cron_schemas_close_action" model="ir.cron">
+			<field name="name">Schemas Close Scheduler</field>
+			<field name="active">True</field>
+			<field name="user_id">1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="doall">False</field>
+			<field name="model">rdm.schemas</field>
+			<field name="function">close_schemas_scheduler</field>
+		</record>		
+	</data>
+</odoo>

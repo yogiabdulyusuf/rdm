@@ -1,0 +1,7 @@
+<odoo>
+    <data>
+        <menuitem id="rdm_tenant_menu" name="Tenant" parent="base.rdm_master_menu"  action="action_rdm_tenant" sequence="2"/>
+        <!-- <menuitem id="rdm_tenant_message_category_menu" name="Message Category" parent="jakc_redemption.rdm_general_tenant_menu" action="action_rdm_tenant_message_category" sequence="4"/> -->
+        <menuitem id="rdm_tenant_message_menu" name="Tenant Message" parent="base.rdm_master_menu"  action="action_rdm_tenant_message" sequence="3"/>                      
+    </data>
+</odoo>

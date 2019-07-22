@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>		
+		<record forcecreate="True" id="ir_cron_reward_trans_booking_expired_action" model="ir.cron">
+			<field name="name">Reward Transaction Booking Expired Scheduler</field>
+			<field name="active">False</field>
+			<field name="user_id">1</field>
+			<field name="interval_number">1</field>
+			<field name="interval_type">days</field>
+			<field name="numbercall">-1</field>
+			<field name="doall">False</field>
+			<field name="model">rdm.reward.trans</field>
+			<field name="function">process_reward_expired</field>
+		</record>		
+	</data>
+</odoo>

@@ -1,0 +1,5 @@
+<odoo>
+    <data>        
+        <menuitem id="rdm_promo_menu" name="Promo Schemas" parent="base.rdm_promo_menu" action="action_rdm_promo_schemas" sequence="2"/>
+    </data>
+</odoo>

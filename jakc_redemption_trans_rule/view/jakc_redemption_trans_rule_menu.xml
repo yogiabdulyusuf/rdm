@@ -1,0 +1,5 @@
+<odoo>
+    <data>            	
+        <menuitem id="rdm_rules_menu" name="Rules" parent="base.rdm_promo_menu" action="action_rdm_rules" sequence="1"/>
+    </data>
+</odoo>

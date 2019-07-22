@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_rdm_customer_coupon_form_inherit_rdm_customer" model="ir.ui.view">
+            <field name="name">rdm.customer.coupon.form.inherit.rdm.customer</field>
+            <field name="model">rdm.customer</field>
+            <field name="type">form</field>
+            <field name="inherit_id" ref="jakc_redemption_customer.view_rdm_customer_form"/>					
+            <field name="arch" type="xml">
+				<field name="social_id" position="after">
+					<field name="coupon"/>
+				</field>
+                <notebook position="inside">
+                    <page string="Coupons">                    	
+                        <field name="customer_coupon_ids" widget="one2many_list" nolabel="1" domain="[('state','=','active'])]">
+                            <tree string="Coupons">                                                                                                
+                                <field name="trans_type"/>                                
+								<field name="coupon"/>                                	
+                                <field name="expired_date"/>
+                                <field name="state"/>                                                                                                                                                                                                                                                                     
+                            </tree>                    
+                        </field>
+                    </page>
+                </notebook>
+
+            </field>
+        </record>
+
+        <menuitem id="rdm_customer_coupon_detail_menu" name="Coupon Detail" parent="base.rdm_promo_menu" action="action_rdm_customer_coupon_detail" sequence="2"/>
+
+    </data>
+</odoo>
