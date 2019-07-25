@@ -35,75 +35,75 @@ class rdm_reward(models.Model):
     # def get_trans(self, cr, uid, ids, context=None):
     #     trans_id = ids[0]
     #     return self.browse(cr, uid, trans_id, context=context)
-    #
-    # def trans_close(self, cr, uid, ids, context=None):
-    #     values = {}
-    #     values.update({'state':'done'})
-    #     return super(rdm_reward, self).write(cr, uid, ids, values, context=context)
-    #
-    # def trans_re_open(self, cr, uid, ids, context=None):
-    #     values = {}
-    #     values.update({'state':'draft'})
-    #     return super(rdm_reward, self).write(cr, uid, ids, values, context=context)
-    #
-    # def get_stocks(self, cr, uid, ids, field_name, args, context=None):
-    #     _logger.info('Start Get Stocks')
-    #     id = ids[0]
-    #     trans = self.get_trans(cr, uid, ids, context)
-    #     total = 0
-    #     res = {}
-    #     if trans.type == 'goods':
-    #         total_stock = self.env['rdm.reward.goods'].get_stock(cr, uid, id, context=context)
-    #         total_booking = self.env['rdm.reward.trans'].get_reward_booking(cr, uid, id, context=context)
-    #         total_usage = self.env['rdm.reward.trans'].get_reward_usage(cr, uid, id, context=context)
-    #     if trans.type == 'coupon':
-    #         total_stock = self.env['rdm.reward.coupon'].get_stock(cr, uid, id, context=context)
-    #         total_booking = self.env['rdm.reward.trans'].get_reward_booking(cr, uid, id, context=context)
-    #         total_usage = self.env['rdm.reward.trans'].get_reward_usage(cr, uid, id, context=context)
-    #     res[id] = total_stock - total_booking - total_usage
-    #     _logger.info('End Get Stocks')
-    #     return res
-    #
-    # def get_bookings(self, cr, uid, ids, field_name, args, context=None):
-    #     _logger.info('Start Get Booking')
-    #     id = ids[0]
-    #     total = self.env('rdm.reward.trans').get_reward_booking(cr, uid, id, context=context)
-    #     res = {}
-    #     res[id] = total
-    #     _logger.info('End Get Booking')
-    #     return res
-    #
-    # def get_usages(self, cr, uid, ids, field_name, args, context=None):
-    #     _logger.info('Start Get Usage')
-    #     id = ids[0]
-    #     total = self.env('rdm.reward.trans').get_reward_usage(cr, uid, id, context=context)
-    #     res = {}
-    #     res[id] = total
-    #     _logger.info('End Get Usages')
-    #     return res
-    #
-    # def trans_reward_expired(self, cr, uid, ids, context=None):
-    #     _logger.info('Start Trans Reward Expired')
-    #     today = datetime.now()
-    #     trans = self.get_trans(cr, uid, ids, context)
-    #     if trans.is_booking:
-    #         if datetime.strptime(trans.booking_expired,'%Y-%m-%d') <= today:
-    #             values = {}
-    #             values.update({'state':'expired'})
-    #             self.write(cr, uid, ids, values, context=context)
-    #     _logger.info('End Trans Reward Expired')
-    #     return True
-    #
-    # def process_reward_expired(self, cr, uid, context=None):
-    #     _logger.info('Start Process Reward Expired')
-    #     today = datetime.now()
-    #     args = [('is_booking','=',True),('booking_expired','<=', today.strftime('%Y-%m-%d'),('state','=','open'))]
-    #     reward_trans_ids = self.search(cr, uid, args, context=context)
-    #     values = {}
-    #     values.update({'state':'expired'})
-    #     self.write(cr, uid, reward_trans_ids, values, context=context)
-    #     _logger.info('End Process Reward Expired')
-    #     return True
+    
+    @api.one
+    def trans_close(self):
+        self.state = 'done'
+    
+    @api.one
+    def trans_re_open(self):
+        self.state = 'draft'
+    
+    @api.one
+    def get_stocks(self):
+        _logger.info('Start Get Stocks')
+        total = 0
+        res = {}
+        for trans in self:
+            if trans.type == 'goods':
+                total_stock = self.env['rdm.reward.goods'].get_stock()
+                total_booking = self.env['rdm.reward.trans'].get_reward_booking()
+                total_usage = self.env['rdm.reward.trans'].get_reward_usage()
+            if trans.type == 'coupon':
+                total_stock = self.env['rdm.reward.coupon'].get_stock()
+                total_booking = self.env['rdm.reward.trans'].get_reward_booking()
+                total_usage = self.env['rdm.reward.trans'].get_reward_usage()
+            res[id] = total_stock - total_booking - total_usage
+        _logger.info('End Get Stocks')
+        return res
+    
+    @api.one
+    def get_bookings(self):
+        _logger.info('Start Get Booking')
+        id = ids[0]
+        total = self.env['rdm.reward.trans'].get_reward_booking()
+        res = {}
+        res[id] = total
+        _logger.info('End Get Booking')
+        return res
+    
+    @api.one
+    def get_usages(self):
+        _logger.info('Start Get Usage')
+        id = ids[0]
+        total = self.env['rdm.reward.trans'].get_reward_usage()
+        res = {}
+        res[id] = total
+        _logger.info('End Get Usages')
+        return res
+    
+    @api.one
+    def trans_reward_expired(self):
+        _logger.info('Start Trans Reward Expired')
+        today = datetime.now()
+        for trans in self:
+            if trans.is_booking:
+                if datetime.strptime(trans.booking_expired,'%Y-%m-%d') <= today:
+                    self.state = 'expired'
+
+            _logger.info('End Trans Reward Expired')
+            return True
+    
+    def process_reward_expired(self):
+        _logger.info('Start Process Reward Expired')
+        today = datetime.now()
+        args = [('is_booking','=',True),('booking_expired','<=', today.strftime('%Y-%m-%d'),('state','=','open'))]
+        reward_trans_ids = self.search(args)
+        vals = {}
+        vals.update({'state':'expired'})
+        reward_trans_ids.write(vals)
+        _logger.info('End Process Reward Expired')
+        return True
                     
     name = fields.Char(string='Name', size=100, required=True)
     type = fields.Selection(AVAILABLE_TYPE,'Type', size=16, required=True, default='goods')
@@ -352,34 +352,35 @@ class rdm_reward_trans(models.Model):
     # def _get_reward(self, cr, uid, reward_id, context=None):
     #     reward = self.env('rdm.reward').browse(cr, uid, reward_id, context=context)
     #     return reward
-    #
-    # def get_reward_usage(self, cr, uid, reward_id, context=None):
-    #     _logger.info('Start Get Reward Usage')
-    #     total = 0
-    #     sql_req= "SELECT count(*) as total FROM rdm_reward_trans WHERE reward_id=" + str(reward_id) + " AND state='done'"
-    #     cr.execute(sql_req)
-    #     sql_res = cr.dictfetchone()
-    #     if sql_res is not None:
-    #         if sql_res['total'] is not None:
-    #             total = sql_res['total']
-    #         else:
-    #             total_ = 0
-    #     _logger.info('End Get Reward Usage')
-    #     return total
-    #
-    # def get_reward_booking(self, cr, uid, reward_id, context=None):
-    #     _logger.info('Start Get Reward Booking')
-    #     total = 0
-    #     sql_req= "SELECT count(*) as total FROM rdm_reward_trans WHERE is_booking=TRUE AND reward_id=" + str(reward_id) + " AND state='open'"
-    #     cr.execute(sql_req)
-    #     sql_res = cr.dictfetchone()
-    #     if sql_res is not None:
-    #         if sql_res['total'] is not None:
-    #             total = sql_res['total']
-    #         else:
-    #             total_ = 0
-    #     _logger.info('End Get Reward Booking')
-    #     return total
+
+    @api.one
+    def get_reward_usage(self, reward_id):
+        _logger.info('Start Get Reward Usage')
+        total = 0
+
+        args = [("reward_id","=",str(reward_id)),("state","=",'open')]
+        datas_count = self.env["rdm.reward.trans"].search_count(args)
+        if datas_count is not None:
+            total = datas_count
+        else:
+            total = 0
+        _logger.info('End Get Reward Usage')
+        return total
+    
+    @api.one
+    def get_reward_booking(self, reward_id):
+        _logger.info('Start Get Reward Booking')
+        total = 0
+
+        args = [("is_booking","=",True),("reward_id","=",str(reward_id)),("state","=",'open')]
+        datas = self.env["rdm.reward.trans"].search(args)
+        if datas is not None:
+            if datas.total is not None:
+                total = datas.total
+            else:
+                total = 0
+        _logger.info('End Get Reward Booking')
+        return total
     #
     # def process_reward_expired(self, cr, uid, context=None):
     #     _logger.info('Start Process Reward Expired')

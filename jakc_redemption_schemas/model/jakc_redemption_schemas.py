@@ -1,5 +1,6 @@
 from odoo import api, fields, models
 from datetime import datetime
+from odoo.exceptions import ValidationError, Warning
 import logging
 from decimal import Context
 
@@ -126,37 +127,32 @@ class rdm_schemas_rules(models.Model):
     _name = "rdm.schemas.rules"
     _description = "Redemption schemas Rules"
     
-    
-    # def trans_set_global(self):
-    #     schema = "spending"
-    #     trans = self.id
-    #     if trans:
-    #         if not trans.is_global:
-    #             rules_id = trans.rules_id
-    #             rules_detail_ids = rules_id.rules_detail_ids
-    #             status = False
-    #             for rules_detail_id in rules_detail_ids:
-    #                 rule_schema = rules_detail_id.rule_schema
-    #                 if rule_schema  == schema:
-    #                     status = True
-    #             if status:
-    #                 values = {}
-    #                 values.update({"is_global" : True})
-    #                 self.write(values)
-    #             else:
-    #                 raise osv.except_osv(("Warning"), ("Please Provide <b>Spending Rule Schema!</b>"))
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("Already Set Global!"))
-    #
-    # def trans_unset_global(self):
-    #     trans = self.id
-    #     if trans:
-    #         if trans.is_global:
-    #             values = {}
-    #             values.update({"is_global" : False})
-    #             self.write( values)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("Rules is not Global"))
+    @api.one
+    def trans_set_global(self):
+        schema = "spending"
+        for trans in self:
+            if not trans.is_global:
+                rules_id = trans.rules_id
+                rules_detail_ids = rules_id.rules_detail_ids
+                status = False
+                for rules_detail_id in rules_detail_ids:
+                    rule_schema = rules_detail_id.rule_schema
+                    if rule_schema  == schema:
+                        status = True
+                if status:
+                    self.is_global = True
+                else:
+                    raise ValidationError("Please Provide Spending Rule Schema!")
+            else:
+                raise ValidationError("Already Set Global!")
+
+    @api.one
+    def trans_unset_global(self):
+        for trans in self:
+            if trans.is_global:
+                self.is_global = False
+            else:
+                raise ValidationError("Rules is not Global")
         
     
     schemas_id =  fields.Many2one("rdm.schemas","schemas", readonly=True, default=False)
@@ -247,142 +243,143 @@ class rdm_schemas_blast_customer(models.Model):
     _name = "rdm.schemas.blast.customer"
     _description = "Redemption Schema Blast Customer"
     
-    # def _check_customer(self):
-    #     detail_ids = self.env("rdm.schemas.blast.detail").search([("blast_id","=", blast_id),("customer_id","=", customer_id)] )
-    #     if len(detail_ids) > 0:
-    #         return True
-    #     else:
-    #         return False
-    #
-    # def add_customer(self):
-    #     _logger.info("Start Add Customer")
-    #
-    #     blast_id = self.blast_id
-    #     if self.search_type == "all":
-    #         customer_ids = self.env("rdm.customer").search([("state","=","active"),])
-    #         for i in range(len(customer_ids)):
-    #             if not self._check_customer():
-    #                 data = {}
-    #                 data.update({"blast_id" : blast_id})
-    #                 data.update({"customer_id" :  customer_ids[i]})
-    #                 self.env("rdm.schemas.blast.detail").create(data)
-    #
-    #     if self.search_type == "customer":
-    #         customer_id = self.customer_id.id
-    #         if not self._check_customer():
-    #             data = {}
-    #             data.update({"blast_id" : blast_id})
-    #             data.update({"customer_id" : customer_id})
-    #             self.env("rdm.schemas.blast.detail").create(data)
-    #
-    #     if self.search_type == "gender":
-    #         gender_id = self.gender_id.id
-    #         customer_ids = self.env("rdm.customer").search([("gender","=",gender_id),("state","=","active")])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "ethnic":
-    #         ethnic_id = self.enthic_id.id
-    #         customer_ids = self.env("rdm.customer").search([("ethnic","=",ethnic_id),("state","=","active")])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "religion":
-    #         religion_id = self.religion_id.id
-    #         customer_ids = self.env("rdm.customer").search([("religion","=",religion_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "marital":
-    #         marital_id = self.marital_id.id
-    #         customer_ids = self.env("rdm.customer").search([("marital","=",marital_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "education":
-    #         education_id = self.education_id.id
-    #         customer_ids = self.env("rdm.customer").search([("education","=",education_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "interest":
-    #         interest_id = self.interest_id.id
-    #         customer_ids = self.env("rdm.customer").search([("interest_id","=",interest_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     if self.search_type == "occupation":
-    #         occupation_id = self.occupation_id.id
-    #         customer_ids = self.env("rdm.customer").search([("occupation","=",occupation_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #
-    #     if self.search_type == "zone":
-    #         zone_id = self.zone_id.id
-    #         customer_ids = self.env("rdm.customer").search([("zone","=",zone_id)])
-    #         if len(customer_ids) > 0:
-    #             for i in range(len(customer_ids)):
-    #                 if not self._check_customer():
-    #                     data = {}
-    #                     data.update({"blast_id" : blast_id})
-    #                     data.update({"customer_id" :  customer_ids[i]})
-    #                     self.env("rdm.schemas.blast.detail").create(data)
-    #         else:
-    #             raise osv.except_osv(("Warning"), ("No Customer Found!"))
-    #
-    #     _logger.info("End Add Customer")
-    #
-    #     return False
+    def _check_customer(self, blast_id, customer_id):
+        args = [("blast_id","=", blast_id),("customer_id","=", customer_id)]
+        detail_ids = self.env["rdm.schemas.blast.detail"].search(args)
+        if len(detail_ids) > 0:
+            return True
+        else:
+            return False
+    
+    def add_customer(self):
+        _logger.info("Start Add Customer")
+    
+        blast_id = self.blast_id
+        if self.search_type == "all":
+            customer_ids = self.env["rdm.customer"].search([("state","=","active"),])
+            for i in range(len(customer_ids)):
+                if not self._check_customer(blast_id, customer_ids):
+                    data = {}
+                    data.update({"blast_id" : blast_id})
+                    data.update({"customer_id" :  customer_ids.id})
+                    self.env["rdm.schemas.blast.detail"].create(data)
+    
+        if self.search_type == "customer":
+            customer_id = self.customer_id.id
+            if not self._check_customer(blast_id, customer_ids):
+                data = {}
+                data.update({"blast_id" : blast_id})
+                data.update({"customer_id" : customer_id})
+                self.env["rdm.schemas.blast.detail"].create(data)
+    
+        if self.search_type == "gender":
+            gender_id = self.gender_id.id
+            customer_ids = self.env["rdm.customer"].search([("gender","=", gender_id),("state","=","active")])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "ethnic":
+            ethnic_id = self.enthic_id.id
+            customer_ids = self.env("rdm.customer").search([("ethnic","=", ethnic_id),("state","=","active")])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "religion":
+            religion_id = self.religion_id.id
+            customer_ids = self.env["rdm.customer"].search([("religion","=", religion_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "marital":
+            marital_id = self.marital_id.id
+            customer_ids = self.env["rdm.customer"].search([("marital","=", marital_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "education":
+            education_id = self.education_id.id
+            customer_ids = self.env["rdm.customer"].search([("education","=", education_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "interest":
+            interest_id = self.interest_id.id
+            customer_ids = self.env["rdm.customer"].search([("interest_id","=", interest_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        if self.search_type == "occupation":
+            occupation_id = self.occupation_id.id
+            customer_ids = self.env["rdm.customer"].search([("occupation","=", occupation_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+    
+        if self.search_type == "zone":
+            zone_id = self.zone_id.id
+            customer_ids = self.env["rdm.customer"].search([("zone","=",zone_id)])
+            if len(customer_ids) > 0:
+                for i in range(len(customer_ids)):
+                    if not self._check_customer(blast_id, customer_ids):
+                        data = {}
+                        data.update({"blast_id" : blast_id})
+                        data.update({"customer_id" :  customer_ids.id})
+                        self.env["rdm.schemas.blast.detail"].create(data)
+            else:
+                raise ValidationError("No Customer Found!")
+    
+        _logger.info("End Add Customer")
+    
+        return False
         
     
     search_type =  fields.Selection(AVAILABLE_SEARCH_TYPE_STATES,"Search Type", size=16, required=True)
@@ -431,35 +428,33 @@ class rdm_schemas(models.Model):
         self.state = "waiting"
         return True
     
-    # def id(self):
-    #     return self.id
-    #
-    # def active_schemas(self):
-    #     ids = self.env("rdm.schemas").search([("state","=","open"),("type","=","promo"),])
-    #     return self.env("rdm.schemas").browse(ids)
-    #
-    # def promo_to_close(self):
-    #     today = datetime.now().strftime("%Y-%m-%d")
-    #     args = [("state","=","open"),("end_date","<",today)]
-    #     ids = self.search(cr, uid, args)
-    #     values = {}
-    #     values.update({"state" : "done"})
-    #     self.write( values)
-    #     return True
-    #
-    # def active_promo_schemas(self):
-    #     ids = {}
-    #     today = datetime.now().strftime("%Y-%m-%d")
-    #     ids = self.env("rdm.schemas").search([("state","=","open"),("type","=","promo"),("start_date","<=",today),("end_date",">=", today)])
-    #     return self.env("rdm.schemas").browse(ids)
-    #
-    # def active_point_schemas(self):
-    #     ids = {}
-    #     today = datetime.now().strftime("%Y-%m-%d")
-    #     ids = self.env("rdm.schemas").search([("state","=","open"),("type","=","point"),("start_date","<=",today),("end_date",">=", today)])
-    #     return self.env("rdm.schemas").browse(ids)
-    #
-    #
+    
+    def active_schemas(self):
+        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","promo"),])
+        return self.env["rdm.schemas"].browse(ids)
+    
+    def promo_to_close(self):
+        today = datetime.now().strftime("%Y-%m-%d")
+        args = [("state","=","open"),("end_date","<", today)]
+        ids = self.search(args)
+        vals = {}
+        vals.update({"state" : "done"})
+        ids.write(vals)
+        return True
+    
+    def active_promo_schemas(self):
+        ids = {}
+        today = datetime.now().strftime("%Y-%m-%d")
+        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","promo"),("start_date","<=",today),("end_date",">=", today)]).browse()
+        return ids
+    
+    def active_point_schemas(self):
+        ids = {}
+        today = datetime.now().strftime("%Y-%m-%d")
+        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","point"),("start_date","<=",today),("end_date",">=", today)]).browse()
+        return ids
+    
+    
     # def start_blast(self):
     #     _logger.info("Start Schemas Blast")
     #     active_schemas = self.env("rdm.schemas").active_schemas(cr, uid)
@@ -491,23 +486,25 @@ class rdm_schemas(models.Model):
     #                     self.env("rdm.schemas.blast").trans_done(blast.id)
     #     _logger.info("End Schemas Blast")
     #
-    # def close_schemas_scheduler(self):
-    #     _logger.info("Start Close Schemas Scheduler")
-    #     result = self.promo_to_close()
-    #     return result
-    #     _logger.info("End Close Schemas Scheduler")
-    #
-    # def _get_open_schemas(self):
-    #     trans = self._id(cr, uid, trans_id, conText)
-    #     ids = None
-    #     if trans.type == "promo":
-    #         ids = self.env("rdm.schemas").search([("type","=","promo"),("state","=","open"),])
-    #     if trans.type == "point":
-    #         ids = self.env("rdm.schemas").search([("type","=","point"),("state","=","open"),])
-    #     if ids:
-    #         return True
-    #     else:
-    #         return False
+    @api.one
+    def close_schemas_scheduler(self):
+        _logger.info("Start Close Schemas Scheduler")
+        result = self.promo_to_close()
+        _logger.info("End Close Schemas Scheduler")
+        return result
+
+    @api.one    
+    def _get_open_schemas(self):
+        for trans in self:
+            ids = None
+            if trans.type == "promo":
+                ids = self.env["rdm.schemas"].search([("type","=","promo"),("state","=","open"),])
+            if trans.type == "point":
+                ids = self.env["rdm.schemas"].search([("type","=","point"),("state","=","open"),])
+            if ids:
+                return True
+            else:
+                return False
     #
     # def _send_email_notification(self):
     #     _logger.info("Start Send Email Notification")
@@ -587,22 +584,24 @@ class rdm_schemas(models.Model):
     receipt_header =  fields.Char("Receipt Header", size=50)
     receipt_footer =  fields.Text("Receipt Footer")
     state =   fields.Selection(AVAILABLE_STATES, "Status", size=16, readonly=True,  default="draft")
-        
-    # def create(self):
-    #     if "point_spend_amount" in values.keys():
-    #         if self.point_spend_amount > 0:
-    #             if not self.point_expired_date:
-    #                 raise osv.except_osv(("Warning"), ("Point Expired Date Required!"))
-    #
-    #     id =  super(rdm_schemas, self).create(values)
-    #     self.trans_waiting()
-    #     return id
-    #
-    # def write(self):
-    #     if "point_spend_amount" in values.keys():
-    #         if self.point_spend_amount > 0:
-    #             if not self.point_expired_date:
-    #                 raise osv.except_osv(("Warning"), ("Point Expired Date Required!"))
-    #
-    #     result =  super(rdm_schemas, self).write(values)
-    #     return result
+    
+    @api.model
+    def create(self, vals):
+        if "point_spend_amount" in vals.keys():
+            if self.point_spend_amount > 0:
+                if not self.point_expired_date:
+                    raise ValidationError("Point Expired Date Required!")
+    
+        id =  super(rdm_schemas, self).create(vals)
+        self.trans_waiting()
+        return id
+
+    @api.multi
+    def write(self, vals):
+        if "point_spend_amount" in vals.keys():
+            if self.point_spend_amount > 0:
+                if not self.point_expired_date:
+                    raise ValidationError("Point Expired Date Required!")
+    
+        result =  super(rdm_schemas, self).write(vals)
+        return result
