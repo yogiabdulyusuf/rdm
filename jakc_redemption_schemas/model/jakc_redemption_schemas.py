@@ -454,38 +454,52 @@ class rdm_schemas(models.Model):
         ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","point"),("start_date","<=",today),("end_date",">=", today)]).browse()
         return ids
     
+    @api.one
+    def start_blast(self):
+        _logger.info("Start Schemas Blast")
+        active_schemas = self.active_schemas()
+        for schemas in active_schemas:
+            blast_ids = schemas.blast_ids
+            for blast in blast_ids:
+                if blast.state == "ready":
+                    blast_schedule  = datetime.strptime(blast.schedule, "%Y-%m-%d %H:%M:%S")
+                    if blast_schedule <= datetime.now():
+                        _logger.info("Email Blast for " + schemas.name + " executed")
+
+                        self.env["rdm.schemas.blast"].trans_process(blast.id)
+
+                        email_from = "info@taman-anggrek-mall.com"
+                        subject = schemas.name
+                        body_html = schemas.desc_email
+                        blast_customer_schemas_blast_ids = blast.customer_schemas_blast_ids
+                        #blast_detail_ids = blast.blast_detail_ids
+                        for customer_id in blast_customer_schemas_blast_ids:
+                            if customer_id.receive_email:
+                                _logger.info("Send Email to " + customer_id.name)
+
+                                # email_to = customer_id.email
+                                # message = {}
+                                # message.update({"email_from" : email_from})
+                                # message.update({"email_to" : email_to})
+                                # message.update({"subject" : subject})
+                                # message.update({"body_html" : body_html})
+                                # self._send_email_notification(message)
+                                
+                                email_to = customer_id.email
+                                args = [('name', '=', 'Schemas Blast')]  # CHANGE
+                                template_ids = self.env['mail.template'].search(args)
+                                vals = {}
+                                vals.update({"email_from" : email_from})
+                                vals.update({'email_to': email_to})
+                                vals.update({"subject" : subject})
+                                vals.update({"body_html" : body_html})
+                                template_ids.write(vals)
+                                template_ids[0].sudo().send_mail(schemas.id, force_send=True)
+                            else:
+                                _logger.info("Send Email to " + customer_id.name + " not allowed!")
+                        self.env("rdm.schemas.blast").trans_done(blast.id)
+        _logger.info("End Schemas Blast")
     
-    # def start_blast(self):
-    #     _logger.info("Start Schemas Blast")
-    #     active_schemas = self.env("rdm.schemas").active_schemas(cr, uid)
-    #     for schemas in active_schemas:
-    #         blast_ids = schemas.blast_ids
-    #         for blast in blast_ids:
-    #             if blast.state == "ready":
-    #                 blast_schedule  = datetime.strptime(blast.schedule, "%Y-%m-%d %H:%M:%S")
-    #                 if blast_schedule <= datetime.now():
-    #                     _logger.info("Email Blast for " + schemas.name + " executed")
-    #                     self.env("rdm.schemas.blast").trans_process([blast.id])
-    #                     email_from = "info@taman-anggrek-mall.com"
-    #                     subject = schemas.name
-    #                     body_html = schemas.desc_email
-    #                     blast_customer_schemas_blast_ids = blast.customer_schemas_blast_ids
-    #                     #blast_detail_ids = blast.blast_detail_ids
-    #                     for customer_id in blast_customer_schemas_blast_ids:
-    #                         if customer_id.receive_email:
-    #                             _logger.info("Send Email to " + customer_id.name)
-    #                             email_to = customer_id.email
-    #                             message = {}
-    #                             message.update({"email_from" : email_from})
-    #                             message.update({"email_to" : email_to})
-    #                             message.update({"subject" : subject})
-    #                             message.update({"body_html" : body_html})
-    #                             self._send_email_notification(message)
-    #                         else:
-    #                             _logger.info("Send Email to " + customer_id.name + " not allowed!")
-    #                     self.env("rdm.schemas.blast").trans_done(blast.id)
-    #     _logger.info("End Schemas Blast")
-    #
     @api.one
     def close_schemas_scheduler(self):
         _logger.info("Start Close Schemas Scheduler")

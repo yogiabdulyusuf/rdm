@@ -19,9 +19,9 @@
 			                    <field name="point"/>
                                 <field name="coupon_number" attrs="{'invisible':[('type','!=','coupon')],'required':[('type','==','coupon')]}"/>
 			                    <field name="limit_count"/>             
-			                    <!--<field name="stock"/>-->
-			                    <!--<field name="booking"/>			                    		                   -->
-			                    <!--<field name="usage"/>			                    			                                                			                                             -->
+			                    <field name="stock"/>
+			                    <field name="booking"/>
+			                    <field name="usage"/>
 			                    <field name="state"/>	                                                   		                    															
 							</group>                    
 							<group>
@@ -174,15 +174,15 @@
 	                    <group colspan="2">
 							<group>
 		                    	<field name="trans_date"/>                           
-			                    <field name="customer_id" domain="[('state','=','active')]"/>		                                                	
+			                    <field name="customer_id" />
 			                    <field name="remarks"/>
-			                    <field name="is_booking" on_change="onchange_is_booking(is_booking)"/>
+			                    <field name="is_booking" />
 			                    <field name="booking_expired" attrs="{'invisible':[('is_booking','=',False)]}"/>		                          
 			                    <field name="state"/>	       
 			                    <field name="printed"/>																
 							</group>	                    	
 		                    <group>
-		                    	<field name="reward_id" domain="[('state','=','draft')]" on_change="onchange_reward_id(reward_id)"/>                            
+		                    	<field name="reward_id" />
 		                    	<field name="point"/>	
 		                    </group>             
 	                    </group>

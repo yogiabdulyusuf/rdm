@@ -64,83 +64,83 @@
 	                            <field name="day_name"/>                        
 	                        </page>
 							<page string="Ethnic" attrs="{'invisible':[('rule_schema','!=','ethnic')]}">
-	                            <field name="ethnic_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="ethnic_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Ethnic">
 	                        			<field name="ethnic_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page> 	                        
 	                        <page string="Religion" attrs="{'invisible':[('rule_schema','!=','religion')]}">
-								<field name="religion_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+								<field name="religion_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Religion">
 	                        			<field name="religion_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>
 							<page string="Marital" attrs="{'invisible':[('rule_schema','!=','marital')]}">
-	                            <field name="marital_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="marital_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Marital">
 	                        			<field name="marital_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>
 	                        <page string="Zone" attrs="{'invisible':[('rule_schema','!=','zone')]}">
-	                            <field name="zone_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="zone_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Zone">
 	                        			<field name="zone_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>                                               
 	                        <page string="Education" attrs="{'invisible':[('rule_schema','!=','education')]}">
-	                            <field name="education_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="education_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Education">
 	                        			<field name="education_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>                                               
 	                        <page string="Interest" attrs="{'invisible':[('rule_schema','!=','interest')]}">
-	                            <field name="interest_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="interest_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Interest">
 	                        			<field name="interest_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>                                               
 	                        <page string="Occupation" attrs="{'invisible':[('rule_schema','!=','occupation')]}">
-	                            <field name="occupation_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="occupation_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Occupation">
 	                        			<field name="occupation_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>     	                             	                                        	                                                                  	                                              	                                             	                      
 	                        <page string="Card Type" attrs="{'invisible':[('rule_schema','!=','cardtype')]}">
-	                            <field name="card_type_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="card_type_ids" widget="one2many_list" nolabel="1" >
 	                        		<tree string="Card Type">
 	                        			<field name="card_type_id"/>
 	                        		</tree>
 	                            </field>
 	                        </page>                                               
 	                        <page string="Tenant" attrs="{'invisible':[('rule_schema','!=','tenant')]}">
-	                            <field name="tenant_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="tenant_ids" widget="one2many_list" nolabel="1" >
 	                            	<tree>
 	                            		<field name="tenant_id"/>
 	                            	</tree>
 	                            </field>	                            
 	                        </page>                                               
 	                        <page string="Tenant Category" attrs="{'invisible':[('rule_schema','!=','tenanttype')]}">
-	                            <field name="tenant_category_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="tenant_category_ids" widget="one2many_list" nolabel="1" >
 	                            	<tree>
 	                            		<field name="tenant_category_id"/>
 	                            	</tree>
 	                            </field>
 	                        </page>                                               
 	                        <page string="Bank" attrs="{'invisible':[('rule_schema','!=','bank')]}">
-	                            <field name="bank_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}"/>
+	                            <field name="bank_ids" widget="one2many_list" nolabel="1" />
 	                        </page>                                               
 	                        <page string="Bank Card" attrs="{'invisible':[('rule_schema','!=','bankcard')]}">
-	                            <field name="bank_card_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}"/>
+	                            <field name="bank_card_ids" widget="one2many_list" nolabel="1" />
 	                        </page>                                               
 	                        <page string="Customer Age" attrs="{'invisible':[('rule_schema','!=','age')]}">
-	                            <field name="age_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="age_ids" widget="one2many_list" nolabel="1" >
 									<tree>
 										<field name="operator"/>
 										<field name="value1"/>
@@ -149,7 +149,7 @@
 								</field>                        
 	                        </page>
 	                        <page string="Spending Amount" attrs="{'invisible':[('rule_schema','!=','spending')]}">
-	                            <field name="spending_amount_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="spending_amount_ids" widget="one2many_list" nolabel="1" >
 									<tree>
 										<field name="operator"/>
 										<field name="value1"/>
@@ -158,13 +158,13 @@
 								</field>                        
 	                        </page>                                               	                                                                      
 	                        <page string="Gender" attrs="{'invisible':[('rule_schema','!=','gender')]}">
-	                            <field name="gender_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}"/>
+	                            <field name="gender_ids" widget="one2many_list" nolabel="1" />
 	                        </page> 	                 
 	                        <page string="Participant" attrs="{'invisible':[('rule_schema','!=','participant')]}">
-	                            <field name="participant_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}"/>
+	                            <field name="participant_ids" widget="one2many_list" nolabel="1" />
 	                        </page> 	                 
 	                       	<page string="Cash Transaction" attrs="{'invisible':[('rule_schema','!=','cash')]}">
-	                            <field name="cash_ids" widget="one2many_list" nolabel="1" context="{'rules_id': active_id}">
+	                            <field name="cash_ids" widget="one2many_list" nolabel="1" >
 	                            	<tree string="Cash">
 	                            		<field name="bank_id"/>
 	                            	</tree>

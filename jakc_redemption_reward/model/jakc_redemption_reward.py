@@ -48,36 +48,49 @@ class rdm_reward(models.Model):
     @api.one
     def get_stocks(self):
         _logger.info('Start Get Stocks')
-        reward_id = self.id
+        # reward_id = self.id
         total = 0
-        res = {}
-        for trans in self:
-            if trans.type == 'goods':
-                total_stock = self.env['rdm.reward.goods'].get_stock(reward_id)
-                total_booking = self.env['rdm.reward.trans'].get_reward_booking(reward_id)
-                total_usage = self.env['rdm.reward.trans'].get_reward_usage(reward_id)
-            if trans.type == 'coupon':
-                total_stock = self.env['rdm.reward.coupon'].get_stock(reward_id)
-                total_booking = self.env['rdm.reward.trans'].get_reward_booking(reward_id)
-                total_usage = self.env['rdm.reward.trans'].get_reward_usage(reward_id)
-            total = total_stock - total_booking - total_usage
-        self.stock = total
+        total_stock = 0
+        total_booking = 0
+        total_usage = 0
+        # res = {}
+        if self.type == 'goods':
+            total_stock_ids = self.env['rdm.reward.goods'].get_stock(self.id)
+            total_booking_ids = self.env['rdm.reward.trans'].get_reward_booking(self.id)
+            total_usage_ids = self.env['rdm.reward.trans'].get_reward_usage(self.id)
+            total_stock = total_stock_ids
+            total_booking = total_booking_ids
+            total_usage = total_usage_ids
+        if self.type == 'coupon':
+            total_stock_ids = self.env['rdm.reward.coupon'].get_stock(self.id)
+            total_booking_ids = self.env['rdm.reward.trans'].get_reward_booking(self.id)
+            total_usage_ids = self.env['rdm.reward.trans'].get_reward_usage(self.id)
+            total_stock = total_stock_ids
+            total_booking = total_booking_ids
+            total_usage = total_usage_ids
+
+        _logger.info('Get Stock')
+        _logger.info(total_stock)
+        _logger.info('Get Booking')
+        _logger.info(total_booking)
+        _logger.info('Get Usage')
+        _logger.info(total_usage)
+
+        self.stock = total_stock - total_booking - total_usage
         _logger.info('End Get Stocks')
+
     
     @api.one
     def get_bookings(self):
         _logger.info('Start Get Booking')
-        reward_id = self.id
-        total = self.env['rdm.reward.trans'].get_reward_booking(reward_id)
+        total = self.env['rdm.reward.trans'].get_reward_booking(self.id)
         self.booking = total
         _logger.info('End Get Booking')
-        return res
     
     @api.one
     def get_usages(self):
         _logger.info('Start Get Usage')
-        reward_id = self.id
-        total = self.env['rdm.reward.trans'].get_reward_usage(reward_id)
+        total = self.env['rdm.reward.trans'].get_reward_usage(self.id)
         self.usage = total
         _logger.info('End Get Usages')
     
@@ -118,28 +131,43 @@ class rdm_reward(models.Model):
     goods_ids = fields.One2many('rdm.reward.goods', 'reward_id', string='Goods')
     coupon_ids = fields.One2many('rdm.reward.coupon', 'reward_id', string='Coupon')
     voucher_ids = fields.One2many('rdm.reward.voucher', 'reward_id', string='Voucher')
-    state = fields.Selection(AVAILABLE_STATES, string='Status',size=16,readonly=True)
+    state = fields.Selection(AVAILABLE_STATES, string='Status',size=16, readonly=True, default='draft')
 
 
 class rdm_reward_goods(models.Model):
     _name = "rdm.reward.goods"
     _rec_name = 'reward_id'
     _description = "Redemption Reward Goods"
-    
-    @api.one
+
     def get_stock(self, reward_id):
         _logger.info('Start Get Goods Stocks')
-        total_stock = 0
-        sql_req= "SELECT sum(stock) as total FROM rdm_reward_goods WHERE reward_id=" + str(reward_id) + " AND state='open'"
-        self.env.cr.execute(sql_req)
-        sql_res = self.env.cr.dictfetchone()
-        if sql_res is not None:
-        	if sql_res['total'] is not None:
-        		total_stock = sql_res['total']
-        	else:
-          		total_stock = 0
-        _logger.info('End Get Goods Stocks')
-        return total_stock
+        # total_stock = 0
+        # sql_req= "SELECT sum(stock) as total FROM rdm_reward_goods WHERE reward_id=" + reward_id + " AND state='open'"
+        # self.env.cr.execute(sql_req)
+        # sql_res = self.env.cr.dictfetchone()
+        # if sql_res is not None:
+        # 	if sql_res['total'] is not None:
+        # 		total_stock = sql_res['total']
+        # 	else:
+        #   		total_stock = 0
+        # total_stock = 0
+        args = [('reward_id','=', reward_id), ('state','=','open')] #, ('state','=','open')
+        datas = self.env['rdm.reward.goods'].search(args)
+        _logger.info(datas)
+        if datas:
+            for row in datas:
+                if row.stock:
+                    total_stock = row.stock
+                else:
+                    total_stock = 0
+
+            _logger.info('End Get Goods Stocks')
+            _logger.info(total_stock)
+
+            return total_stock
+
+
+
                                 
     
     reward_id = fields.Many2one('rdm.reward','Reward', readonly=True)
@@ -152,12 +180,11 @@ class rdm_reward_coupon(models.Model):
     _name = "rdm.reward.coupon"
     _rec_name = 'reward_id'
     _description = "Redemption Reward Coupon"
-    
-    @api.one
+
     def get_stock(self, reward_id):
         _logger.info('Start Get Coupon Stocks')
         total_stock = 0
-        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id=" + str(reward_id)
+        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id=" + reward_id
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
 
@@ -177,18 +204,16 @@ class rdm_reward_voucher(models.Model):
     _rec_name = 'reward_id'
     _description = "Redemption Reward Voucher"
     
-    def get_stock(self, cr, uid, reward_id, context=None):
-        _logger.info('Start Get Voucher Stocks')
-        total_stock = 0
-        # sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id=" + str(reward_id) + " AND state='open'"
-        # cr.execute(sql_req)
-        # sql_res = cr.dictfetchone()
-
-        datas_count = self.env['rdm.reward.voucher'].search_count(args, count=True)
-        if datas_count:
-            total_stock = datas_count
-        _logger.info('End Get Voucher Stocks')
-        return total_stock
+    def get_stock(self, reward_id):
+        _logger.info('Start Get Voucher Stocks')     
+        total_stock = 0        
+        sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id=" + reward_id + " AND state='open'"            
+        self.env.cr.execute(sql_req)
+        sql_res = self.env.cr.dictfetchone()
+        if sql_res:
+            total_stock = sql_res['total']            
+        _logger.info('End Get Voucher Stocks')        
+        return total_stock    
     
     
     
@@ -220,11 +245,11 @@ class rdm_reward_trans(models.Model):
     
     @api.one
     def check_reward_limit_count(self, customer_id, reward_id):
-        reward = self.env['rdm.reward'].search([('id', '=', reward_id),])
+        reward = self.env['rdm.reward'].search([('reward_trans_ids', '=', reward_id),])
         if reward.limit_count  == -1:
             return True
         else:
-            args = [('customer_id','=',str(customer_id)), ('reward_id','=',str(reward_id)), ('state','=','done')]
+            args = [('customer_id','=', customer_id), ('reward_id','=', reward_id), ('state','=','done')]
             datas_count = self.env['rdm.reward.trans'].search_count(args, count=True)
             if datas_count:
                 total = datas_count
@@ -237,7 +262,7 @@ class rdm_reward_trans(models.Model):
 
     @api.one
     def check_reward_stock(self, reward_id):
-        reward = self.env['rdm.reward'].search([('id', '=', reward_id),])
+        reward = self.env['rdm.reward'].search([('reward_trans_ids', '=', reward_id),])
         if reward.stock > 0:
             return True
         else:
@@ -248,11 +273,7 @@ class rdm_reward_trans(models.Model):
 
         reward_limit_count_config_ids = self.env.user.company_id.reward_limit_count
         reward_limit_config_ids = self.env.user.company_id.reward_limit
-
-        if not reward_limit_count_config_ids:
-            raise ValidationError("reward_limit_count please define on company information!")
-        if not reward_limit_config_ids:
-            raise ValidationError("reward_limit please define on company information!")
+        reward_limit_product_config_ids = self.env.user.company_id.reward_limit_product
 
         if reward_limit_count_config_ids  == -1:
             return True
@@ -264,8 +285,8 @@ class rdm_reward_trans(models.Model):
                 # cr.execute(sql_req)
                 # sql_res = cr.dictfetchone()
 
-                args = [('customer_id','=', str(customer_id)), ('trans_date','=', datetime.today().strftime('%Y-%m-%d')), ('state','=','done')]
-                datas = self.env['rdm.reward.trans'].search_count(args, count=True)
+                args = [('customer_id','=', customer_id), ('trans_date','=', datetime.today().strftime('%Y-%m-%d')), ('state','=','done')]
+                datas = self.env['rdm.reward.trans'].search_count(args)
                 if datas:
                     current_total = datas
                 else:
@@ -277,13 +298,13 @@ class rdm_reward_trans(models.Model):
                 else:
                     return True
     
-            if reward_config.reward_limit_product:
-                # sql_req= "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id=" + str(customer_id) + " AND c.reward_id=" + str(reward_id) + " AND c.trans_date='" + datetime.today().strftime('%Y-%m-%d') + "' AND c.state='done'"
+            if reward_limit_product_config_ids:
+                # sql_req= "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id=" + str(customer_id) + " AND c.reward_id=" + reward_id + " AND c.trans_date='" + datetime.today().strftime('%Y-%m-%d') + "' AND c.state='done'"
                 # cr.execute(sql_req)
                 # sql_res = cr.dictfetchone()
 
-                args = [('customer_id','=', str(customer_id)), ('reward_id','=', str(reward_id)), ('trans_date','=',datetime.today().strftime('%Y-%m-%d')), ('state','=','done')]
-                datas = self.env['rdm.reward.trans'].search_count(args, count=True)
+                args = [('customer_id','=', customer_id), ('reward_id','=', reward_id), ('trans_date','=',datetime.today().strftime('%Y-%m-%d')), ('state','=','done')]
+                datas = self.env['rdm.reward.trans'].search_count(args)
                 if datas:
                     current_total = datas
                 else:
@@ -357,13 +378,11 @@ class rdm_reward_trans(models.Model):
         res = self.write(values)
         _logger.info("End Reset for ID : " + str(self.id))
     
-    @api.one
-    def onchange_reward_id(self, reward_id):
-        res = {}
-        if reward_id:
-            reward = self.env['rdm.reward'].browse(reward_id)
-            res['point'] = reward.point
-        return {'value':res}
+    @api.onchange('reward_id')
+    @api.depends('reward_id')
+    def onchange_reward_id(self):
+        for rdm_reward in self.reward_id:
+            self.point = rdm_reward.point
     
     @api.one
     def onchange_is_booking(self, is_booking):
@@ -383,37 +402,34 @@ class rdm_reward_trans(models.Model):
     # def get_trans(self, cr, uid, trans_id , context=None):
     #     return self.browse(cr, uid, trans_id, context=context);
 
-    @api.one
     def _get_reward(self, reward_id):
         reward = self.env['rdm.reward'].browse(reward_id)
         return reward
 
-    @api.one
     def get_reward_usage(self, reward_id):
         _logger.info('Start Get Reward Usage')
         total = 0
 
-        args = [("reward_id","=",str(reward_id)),("state","=",'open')]
-        datas_count = self.env["rdm.reward.trans"].search_count(args, count=True)
+        args = [("reward_id","=", reward_id),("state","=",'open')]
+        datas_count = self.env["rdm.reward.trans"].search_count(args)
         if datas_count is not None:
             total = datas_count
         else:
             total = 0
         _logger.info('End Get Reward Usage')
         return total
-    
-    @api.one
+
     def get_reward_booking(self, reward_id):
         _logger.info('Start Get Reward Booking')
         total = 0
 
-        args = [("is_booking","=",True),("reward_id","=",str(reward_id)),("state","=",'open')]
-        datas = self.env["rdm.reward.trans"].search(args)
-        if datas is not None:
-            if datas.total is not None:
-                total = datas.total
-            else:
-                total = 0
+        args = [("is_booking","=",True),("reward_id","=", reward_id),("state","=",'open')]
+        datas_count = self.env["rdm.reward.trans"].search_count(args)
+
+        if datas_count:
+            total = datas_count
+        else:
+            total = 0
         _logger.info('End Get Reward Booking')
         return total
 
@@ -428,49 +444,53 @@ class rdm_reward_trans(models.Model):
         reward_trans_ids.write(vals)
         _logger.info('End Process Reward Expired')
         return True
-    #
-    # def _send_notification_to_customer(self, cr, uid, ids, context=None):
-    #     _logger.info("Start Notification Process")
-    #     trans_id = ids[0]
-    #     trans = self.get_trans(cr, uid, trans_id, context)
-    #     customer_id = trans.customer_id
-    #     rdm_config = self.env('rdm.config').get_config(cr, uid, context=context)
-    #     rdm_reward_config = self.env('rdm.reward.config').get_config(cr, uid, context=context)
-    #     if rdm_config.enable_email and customer_id.receive_email:
-    #         #Send Email
-    #         _logger.info('Send Reward Transaction Notification')
-    #         email_obj = self.env('email.template')
-    #         template_ids = rdm_reward_config.reward_trans_email_tmpl
-    #         email = email_obj.browse(cr, uid, template_ids)
-    #         email_obj.write(cr, uid, template_ids, {'email_from': email.email_from,
-    #                                                 'email_to': email.email_to,
-    #                                                 'subject': email.subject,
-    #                                                 'body_html': email.body_html,
-    #                                                 'email_recipients': email.email_recipients})
-    #         email_obj.send_mail(cr, uid, template_ids, trans.id, True, context=context)
-    #     return True
-    #
-    # def _send_booking_notitication_to_customer(self, cr, uid, ids, context=None):
-    #     _logger.info("Start Booking Notification Process")
-    #     trans_id = ids[0]
-    #     trans = self.get_trans(cr, uid, trans_id, context)
-    #     customer_id = trans.customer_id
-    #     rdm_config = self.env('rdm.config').get_config(cr, uid, context=context)
-    #     rdm_reward_config = self.env('rdm.reward.config').get_config(cr, uid, context=context)
-    #     if rdm_config.enable_email and customer_id.receive_email:
-    #         #Send Email
-    #         _logger.info('Send Reward Booking Notification')
-    #         email_obj = self.env('email.template')
-    #         template_ids = rdm_reward_config.reward_booking_email_tmpl
-    #         email = email_obj.browse(cr, uid, template_ids)
-    #         email_obj.write(cr, uid, template_ids, {'email_from': email.email_from,
-    #                                                 'email_to': email.email_to,
-    #                                                 'subject': email.subject,
-    #                                                 'body_html': email.body_html,
-    #                                                 'email_recipients': email.email_recipients})
-    #         email_obj.send_mail(cr, uid, template_ids, trans.id, True, context=context)
-    #     _logger.info("End Booking Notification Process")
-    #     return True
+    
+    @api.one
+    def _send_notification_to_customer(self):
+        _logger.info("Start Notification Process")
+        # trans_id = ids[0]
+        # trans = self.get_trans(cr, uid, trans_id, context)
+        for trans in self:
+            customer_id = trans.customer_id
+            # rdm_config = self.env('rdm.config').get_config(cr, uid, context=context)
+            # rdm_reward_config = self.env('rdm.reward.config').get_config(cr, uid, context=context)
+            rdm_config_ids = self.env.user.company_id
+            for rdm_config in rdm_config_ids:
+                if rdm_config.enable_email and customer_id.receive_email:
+                    #Send Email
+                    _logger.info('Send Reward Redeem Notification')
+                    args = [('name', '=', 'Reward Redeem Notification')]  # CHANGE
+                    template_ids = self.env['mail.template'].search(args)
+                    vals = {}
+                    vals.update({'email_to': trans.email})
+                    template_ids.write(vals)
+                    template_ids[0].sudo().send_mail(trans.id, force_send=True)
+                    _logger.info("End Reward Redeem Notification")
+
+                    return True
+    
+    def _send_booking_notitication_to_customer(self):
+        _logger.info("Start Booking Notification Process")
+        # trans_id = ids[0]
+        # trans = self.get_trans(cr, uid, trans_id, context)
+        for trans in self:
+            customer_id = trans.customer_id
+            # rdm_config = self.env('rdm.config').get_config(cr, uid, context=context)
+            # rdm_reward_config = self.env('rdm.reward.config').get_config(cr, uid, context=context)
+            rdm_config_ids = self.env.user.company_id
+            for rdm_config in rdm_config_ids:
+                if rdm_config.enable_email and customer_id.receive_email:
+                    #Send Email
+                    _logger.info('Send Reward Booking Notification')
+                    args = [('name', '=', 'Reward Booking Notification')]  # CHANGE
+                    template_ids = self.env['mail.template'].search(args)
+                    vals = {}
+                    vals.update({'email_to': trans.email})
+                    template_ids.write(vals)
+                    template_ids[0].sudo().send_mail(trans.id, force_send=True)
+                    _logger.info("End Booking Notification Process")
+
+                    return True
 
     @api.one
     def _generate_coupon(self):
@@ -513,8 +533,8 @@ class rdm_reward_trans(models.Model):
 
     trans_date = fields.Date('Transaction Date', required=True, readonly=True, default=fields.Date.today())
     customer_id = fields.Many2one('rdm.customer','Customer', required=True)
-    reward_id = fields.Many2one('rdm.reward','Reward', required=True)
-    point = fields.Integer('Point # Deduct', readonly=True)
+    reward_id = fields.Many2one('rdm.reward','Reward', required=True,)
+    point = fields.Integer('Point # Deduct', readonly=True,)
     customer_coupon_ids = fields.One2many('rdm.customer.coupon','reward_trans_id','Coupons')
     remarks = fields.Text('Remarks')
     is_booking = fields.Boolean('Is Booking ?', default=False)
@@ -526,34 +546,36 @@ class rdm_reward_trans(models.Model):
 
     @api.model
     def create(self, vals):
-        customer_id = vals.get('customer_id')
-        reward_id = vals.get('reward_id')
+        # customer_id = vals.get('customer_id')
+        # reward_id = vals.get('reward_id')
     
-        reward_stock = self.check_reward_stock(reward_id)
+        reward_stock = self.check_reward_stock(self.reward_id.id)
         _logger.info("Reward Stock : " + str(reward_stock))
-        if not reward_stock:
-            raise ValidationError('Reward has no stock'))
+        if reward_stock == False:
+            raise ValidationError('Reward has no stock')
     
-        check_reward_limit_count  = self.check_reward_limit_count(customer_id, reward_id)
-        if not check_reward_limit_count:
+        check_reward_limit_count  = self.check_reward_limit_count(self.customer_id.id, self.reward_id.id)
+        if check_reward_limit_count == False:
             raise ValidationError('Reward Limit Count Applied')
     
-        allow_redeem_reward = self.allow_redeem_reward(customer_id, reward_id)
-        if not allow_redeem_reward:
+        allow_redeem_reward = self.allow_redeem_reward(self.customer_id.id, self.reward_id.id)
+        if allow_redeem_reward == False:
             raise ValidationError('Redeem Limit Applied')
     
-        customer_id = self.env['rdm.customer'].browse(customer_id)
-        reward = self._get_reward(reward_id)
+        customer_id = self.env['rdm.customer'].browse(self.customer_id.id)
+        reward = self._get_reward(self.reward_id.id)
 
         if customer_id.point < reward.point:
             raise ValidationError('Point not enough')
     
-        vals.update({'point':reward.point})
+        vals.update({'point': reward.point})
         vals.update({'state':'open'})
         trans_id = super(rdm_reward_trans,self).create(vals)
+        trans_id.onchange_reward_id()
         if vals.get('is_booking') == True:
-            self.env['rdm.customer.point'].deduct_point(trans_id, customer_id.id, vals.get('point'))
-            self._send_booking_notitication_to_customer(trans_id)
+            point = vals.get('point')
+            self.env['rdm.customer.point'].deduct_point(self.trans_id.id, self.customer_id.id, point)
+            self._send_booking_notitication_to_customer(self.trans_id.id)
         return trans_id
     
     @api.multi
@@ -588,10 +610,10 @@ class rdm_reward_trans(models.Model):
         
                     #Deduct point if not booking transaction
                     if not trans.is_booking:
-                        self.env['rdm.customer.point'].deduct_point(trans_id, customer_id, trans.point)
+                        self.env['rdm.customer.point'].deduct_point(trans.trans_id.id, customer_id, trans.point)
                         if trans.reward_id.type == 'coupon':
-                            _logger.info("Generate Coupon " + str(trans.reward_id.coupon_number))
-                            self._generate_coupon(trans_id)
+                            # _logger.info("Generate Coupon " + str(trans.reward_id.coupon_number))
+                            self._generate_coupon(trans.trans_id)
         
                 #Expired Booking Transaction
                 elif values.get('state') == 'expired':

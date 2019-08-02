@@ -6,7 +6,8 @@ _logger = logging.getLogger(__name__)
 
 class rdm_customer(models.Model):
     _inherit = "rdm.customer"
-    
+
+    @api.one
     def get_points(self):
         total = 0
         for datas in self.customer_point_ids:
