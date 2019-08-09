@@ -9,11 +9,14 @@ class rdm_customer(models.Model):
 
     @api.one
     def get_points(self):
-        total = 0
-        for datas in self.customer_point_ids:
-            total = total + datas.point
-        self.point = total
-        _logger.info('Total Point : ' + str(total))
+
+        total_point = self.env['rdm.customer.point'].get_customer_total_point(self.id)
+        _logger.info('Total Point : ' + str(total_point))
+
+        if total_point is None:
+            total_point = 0
+
+        self.point = total_point
 
     # point = fields.function(get_points, type="integer", string='Points')
     point = fields.Integer(string="Points", compute="get_points", required=False,  )

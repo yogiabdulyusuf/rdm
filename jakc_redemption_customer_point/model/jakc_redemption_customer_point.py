@@ -46,12 +46,11 @@ class rdm_customer_point(models.Model):
         args = [('state','=','active')]
         return self.env['rdm.customer.point'].browse(args)
 
-    @api.one
-    def get_customer_total_point(self):
+    def get_customer_total_point(self, customer_id):
         now = datetime.now().strftime('%Y-%m-%d')
         sql_req = """SELECT sum(a.point - a.usage) as total FROM rdm_customer_point a   
-                  WHERE a.customer_id={0} AND expired_date >= '{1}'  
-                  AND a.state='active'""".format(str(self.customer_id), now)
+                  WHERE a.customer_id='{}' AND expired_date >= '{}'  
+                  AND a.state='active'""".format(customer_id, now)
                           
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -61,12 +60,11 @@ class rdm_customer_point(models.Model):
             total_points = 0        
         
         return total_points
-    
-    @api.one
+
     def get_customer_total_point_usage(self, customer_id):            
         sql_req = """SELECT sum(a.usage) as total FROM rdm_customer_point a  
-                  WHERE (a.customer_id={0})                   
-                  AND a.state='active'""".format(str(customer_id))
+                  WHERE (a.customer_id='{}')                   
+                  AND a.state='active'""".format(customer_id)
                           
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -77,14 +75,12 @@ class rdm_customer_point(models.Model):
                     
         return total_points 
 
-    @api.one
     def get_usages(self):
-        trans_id = self.id
-        res = {}
-        total_points = self.env['rdm.customer.point.detail'].get_point_usage(trans_id)
+        # trans_id = self.id
+        # res = {}
+        total_points = self.env['rdm.customer.point.detail'].get_point_usage(self.id)
         _logger.info('Total Points : ' + str(total_points))
-        res[trans_id] = total_points
-        return res
+        return total_points
     
     def deduct_point(self, trans_id, customer_id, point):
         status = False
@@ -107,7 +103,8 @@ class rdm_customer_point(models.Model):
                 self.env['rdm.customer.point.detail'].deduct_point(trans_data)
                 vals = {}
                 vals.update({'usage': point_id.usage + avai_point})
-                super(rdm_customer_point, self).write(vals)
+                # super(rdm_customer_point, self).write(vals)
+                point_ids.write(vals)
                 self.trans_close(point_id.id)
             else:
                 total_point = total_point + sisa_point
@@ -119,7 +116,8 @@ class rdm_customer_point(models.Model):
                 self.env['rdm.customer.point.detail'].deduct_point(trans_data)
                 vals = {}
                 vals.update({'usage': point_id.usage + avai_point})
-                super(rdm_customer_point, self).write(vals)
+                # super(rdm_customer_point, self).write(vals)
+                point_ids.write(vals)
                 break
 
 
@@ -135,10 +133,9 @@ class rdm_customer_point_detail(models.Model):
     _name = "rdm.customer.point.detail"
     _description = "Redemption Customer Point Detail"
 
-    @api.one
     def get_point_usage(self, trans_id):
         sql_req = """SELECT sum(a.point) as total FROM rdm_customer_point_detail a
-                  WHERE (a.customer_point_id={0})""".format(str(trans_id))
+                  WHERE (a.customer_point_id={0})""".format(trans_id)
     
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()

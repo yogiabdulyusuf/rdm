@@ -21,52 +21,52 @@ AVAILABLE_ADJUST_TYPE = [
 class rdm_point_adj(models.Model):
     _name="rdm.point.adj"
     _description =  "Redemption Point Adjustment"
-        
+
     def trans_close(self):
         self.state = 'done'
         self._adjust_point_()
-        return True
     
     # def print_reciept(self):
     #
     #
     # def re_print(self):
-    #
-    
+
+    @api.one
     def trans_reset(self):
         self.state = 'open'
-        return True
-    
+
+    @api.one
     def trans_req_delete(self):
         self.state = 'req_delete'
-        return True
-    
+
+    @api.one
     def trans_delete(self):
         self.state = 'delete'
-        return True
+
     
-    def _get_trans(self):
-        return self.trans_id
+    # def _get_trans(self):
+    #     return self.trans_id
     
     def _adjust_point_(self):
         _logger.info('Start Point Adjustment')
-        trans_id = self.id
-        trans = self._get_trans()
-        point_data = {}
-        point_data.update({'customer_id': trans.customer_id.id})
-        point_data.update({'adj_id':trans.id})
-        point_data.update({'trans_type':'adjust'})
-        if trans.adjust_type == '+':
-            point_data.update({'point':trans.point})
-            point_data.update({'expired_date': trans.expired_date})
-            self.env('rdm.customer.point').create(point_data)
-        if trans.adjust_type == '-':
-            customer = self.env['rdm.customer'].get_trans(trans.customer_id.id)
-            if customer.point >= trans.point:
-                self.env['rdm.customer.point'].deduct_point(trans_id, trans.customer_id.id, trans.point)
-            else:
-                raise ValidationError('Point not enough for adjustment!')
-        _logger.info('End Point Adjustment')
+        # trans_id = self.id
+        # trans = self._get_trans()
+        for trans in self:
+            point_data = {}
+            point_data.update({'customer_id': trans.customer_id.id})
+            point_data.update({'adj_id':trans.id})
+            point_data.update({'trans_type':'adjust'})
+            if trans.adjust_type == '+':
+                point_data.update({'point':trans.point})
+                point_data.update({'expired_date': trans.expired_date})
+                self.env['rdm.customer.point'].create(point_data)
+            if trans.adjust_type == '-':
+                customer = self.env['rdm.customer'].browse(trans.customer_id.id)
+                if customer.point >= trans.point:
+                    self.env['rdm.customer.point'].deduct_point(trans.id, trans.customer_id.id, trans.point)
+                else:
+                    raise ValidationError('Point not enough for adjustment!')
+            _logger.info('End Point Adjustment')
 
 
     trans_date = fields.Date('Date',readonly=True, default=fields.Datetime.now)

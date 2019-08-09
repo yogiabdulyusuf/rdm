@@ -186,9 +186,9 @@ class rdm_customer_coupon_detail(models.Model):
     @api.multi
     def write(self, values):
         # trans = self.get_trans(cr, uid, ids)
-        for trans in  self:
-            if 'state' in values.keys():
-                if values.get('state') == 'claimed':
-                    return self.process_claimed()
-        
-            return super(rdm_customer_coupon_detail, self).write(values)
+        # for trans in  self:
+        if 'state' in values.keys():
+            if values.get('state') == 'claimed':
+                return self.process_claimed()
+
+        return super(rdm_customer_coupon_detail, self).write(values)
