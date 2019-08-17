@@ -137,35 +137,18 @@ class rdm_reward_goods(models.Model):
 
     def get_stock(self, reward_id):
         _logger.info('Start Get Goods Stocks')
-        # total_stock = 0
-        # sql_req= "SELECT sum(stock) as total FROM rdm_reward_goods WHERE reward_id=" + reward_id + " AND state='open'"
-        # self.env.cr.execute(sql_req)
-        # sql_res = self.env.cr.dictfetchone()
-        # if sql_res is not None:
-        # 	if sql_res['total'] is not None:
-        # 		total_stock = sql_res['total']
-        # 	else:
-        #   		total_stock = 0
-        # total_stock = 0
-        args = [('reward_id','=', reward_id), ('state','=','open')] #, ('state','=','open')
-        datas = self.env['rdm.reward.goods'].search(args)
-        _logger.info(datas)
-        if datas:
-            for row in datas:
-                if row.stock:
-                    total_stock = row.stock
-                else:
-                    total_stock = 0
+        total_stock = 0
+        sql_req = "SELECT sum(stock) as total FROM rdm_reward_goods WHERE reward_id='" + str(reward_id) + "' AND state='open'"
+        self.env.cr.execute(sql_req)
+        sql_res = self.env.cr.dictfetchone()
+        if sql_res is not None:
+            if sql_res['total'] is not None:
+                total_stock = sql_res['total']
+            else:
+                total_stock = 0
+        _logger.info('End Get Goods Stocks')
+        return total_stock
 
-            _logger.info('End Get Goods Stocks')
-            _logger.info(total_stock)
-
-            return total_stock
-
-
-
-                                
-    
     reward_id = fields.Many2one('rdm.reward','Reward', readonly=True)
     trans_date = fields.Date('Transaction Date', default=fields.Date.today())
     stock = fields.Integer(string='Stock')
@@ -180,7 +163,7 @@ class rdm_reward_coupon(models.Model):
     def get_stock(self, reward_id):
         _logger.info('Start Get Coupon Stocks')
         total_stock = 0
-        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id=" + reward_id
+        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id='" + reward_id + "'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
 
@@ -203,7 +186,7 @@ class rdm_reward_voucher(models.Model):
     def get_stock(self, reward_id):
         _logger.info('Start Get Voucher Stocks')     
         total_stock = 0        
-        sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id=" + reward_id + " AND state='open'"            
+        sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id='" + reward_id + "' AND state='open'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
         if sql_res:
@@ -277,8 +260,7 @@ class rdm_reward_trans(models.Model):
             limit_total = reward_limit_count_config_ids
 
             if reward_limit_config_ids:
-                sql_req = "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id=" + str(
-                    customer_id) + " AND c.trans_date='" + datetime.today().strftime(
+                sql_req = "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id='" + str(customer_id) + "' AND c.trans_date='" + datetime.today().strftime(
                     '%Y-%m-%d') + "' AND c.state='done'"
                 self.env.cr.execute(sql_req)
                 sql_res = self.env.cr.dictfetchone()
@@ -294,9 +276,7 @@ class rdm_reward_trans(models.Model):
                     return True
 
             if reward_limit_product_config_ids:
-                sql_req = "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id=" + str(
-                    customer_id) + " AND c.reward_id=" + str(
-                    reward_id) + " AND c.trans_date='" + datetime.today().strftime('%Y-%m-%d') + "' AND c.state='done'"
+                sql_req = "SELECT count(*) as total FROM rdm_reward_trans c WHERE c.customer_id='" + str(customer_id) + "' AND c.reward_id='" + str(reward_id) + "' AND c.trans_date='" + datetime.today().strftime('%Y-%m-%d') + "' AND c.state='done'"
                 self.env.cr.execute(sql_req)
                 sql_res = self.env.cr.dictfetchone()
                 if sql_res:
@@ -314,69 +294,7 @@ class rdm_reward_trans(models.Model):
     #     return self.env('rdm.reward.config').get_config(cr, uid, context=context)
     @api.one
     def trans_close(self):
-        # for trans in self:
-        #     if trans['state'] == 'done':
-        #         # Modify Closed Transaction
-        #         if values.get('bypass') == True:
-        #             trans_data = {}
-        #             if values.get('method') == 'trans_reset':
-        #                 trans_data.update({'state': values.get('state')})
-        #             if values.get('method') == 'trans_print_receipt':
-        #                 trans_data.update({'printed': values.get('printed')})
-        #             result = super(rdm_reward_trans, self).write(trans_data)
-        #         else:
-        #             raise ValidationError('Edit not allowed, Transaction already closed!')
-        #     else:
-        #         # Close Transaction
-        #         if values.get('state') == 'done':
-        #             # Check Stock
-        #             if not trans.is_booking:
-        #                 reward_id = trans.reward_id.id
-        #                 reward_stock = self.check_reward_stock(reward_id)
-        #                 if not reward_stock:
-        #                     raise ValidationError('Reward has no stock')
-        #
-        #             # Close Transaction
-        #             result = super(rdm_reward_trans, self).write(values)
-        #
-        #             # Deduct Point
-        #             customer_id = trans.customer_id.id
-        #
-        #             # Deduct point if not booking transaction
-        #             if not trans.is_booking:
-        #                 self.env['rdm.customer.point'].deduct_point(trans.id, customer_id, trans.point)
-        #                 if trans.reward_id.type == 'coupon':
-        #                     # _logger.info("Generate Coupon " + str(trans.reward_id.coupon_number))
-        #                     self._generate_coupon(trans.trans_id)
-        #
-        #         # Expired Booking Transaction
-        #         elif values.get('state') == 'expired':
-        #             result = super(rdm_reward_trans, self).write(values)
-        #         # Other State
-        #         else:
-        #             if 'customer_id' in values.keys():
-        #                 customer_id = values.get('customer_id')
-        #             else:
-        #                 customer_id = trans.customer_id.id
-        #             if 'reward_id' in values.keys():
-        #                 reward_id = values.get('reward_id')
-        #             else:
-        #                 reward_id = trans.reward_id.id
-        #
-        #             allow_redeem_reward = self.allow_redeem_reward(customer_id, reward_id)
-        #             if allow_redeem_reward:
-        #                 customer = self.env['rdm.customer'].browse(customer_id)
-        #                 reward = self._get_reward(reward_id)
-        #                 if customer['point'] >= reward.point:
-        #                     values.update({'point': reward.point})
-        #                     values.update({'state': 'open'})
-        #                     result = super(rdm_reward_trans, self).write(values)
-        #                 else:
-        #                     raise ValidationError('Point not enough')
-        #             else:
-        #                 raise ValidationError('Redeem Limit Applied')
 
-        # _logger.info("Close Transaction for ID : " + str(ids))
         #Close Transaction
         self.write({'state' : 'done'})
         self._send_notification_to_customer()
@@ -405,7 +323,7 @@ class rdm_reward_trans(models.Model):
             j_password = rdm_config.report_password
             ParentFolderUri = '/rdm'
             reportUnit = '/rdm/trans_receipt'
-            url = serverUrl + '/flow.html?_flowId=viewReportFlow&standAlone=true&_flowId=viewReportFlow&ParentFolderUri=' + ParentFolderUri + '&reportUnit=' + reportUnit + '&ID=' +  str(trans_id) + '&decorate=no&j_username=' + j_username + '&j_password=' + j_password + '&output=pdf'
+            url = serverUrl + '/flow.html?_flowId=viewReportFlow&standAlone=true&_flowId=viewReportFlow&ParentFolderUri=' + ParentFolderUri + '&reportUnit=' + reportUnit + '&ID=' +  trans_id + '&decorate=no&j_username=' + j_username + '&j_password=' + j_password + '&output=pdf'
             return {
                 'type':'ir.actions.act_url',
                 'url': url,
@@ -577,7 +495,7 @@ class rdm_reward_trans(models.Model):
             j_password = rdm_config.report_password
             ParentFolderUri = '/rdm'
             reportUnit = '/rdm/reward_receipt'
-            url = serverUrl + '/flow.html?_flowId=viewReportFlow&standAlone=true&_flowId=viewReportFlow&ParentFolderUri=' + ParentFolderUri + '&reportUnit=' + reportUnit + '&ID=' +  str(self.id) + '&decorate=no&j_username=' + j_username + '&j_password=' + j_password + '&output=pdf'
+            url = serverUrl + '/flow.html?_flowId=viewReportFlow&standAlone=true&_flowId=viewReportFlow&ParentFolderUri=' + ParentFolderUri + '&reportUnit=' + reportUnit + '&ID=' +  self.id + '&decorate=no&j_username=' + j_username + '&j_password=' + j_password + '&output=pdf'
             return {
                 'type':'ir.actions.act_url',
                 'url': url,
@@ -636,7 +554,7 @@ class rdm_reward_trans(models.Model):
     @api.multi
     def write(self, values):
         for trans in self:
-            if trans['state'] == 'done':
+            if trans.state == 'done':
                 #Modify Closed Transaction
                 if values.get('bypass') == True:
                     trans_data = {}
@@ -668,7 +586,7 @@ class rdm_reward_trans(models.Model):
                         self.env['rdm.customer.point'].deduct_point(trans.id, customer_id, trans.point)
                         if trans.reward_id.type == 'coupon':
                             # _logger.info("Generate Coupon " + str(trans.reward_id.coupon_number))
-                            self._generate_coupon(trans.trans_id)
+                            self._generate_coupon(trans.id)
         
                 #Expired Booking Transaction
                 elif values.get('state') == 'expired':
@@ -688,7 +606,7 @@ class rdm_reward_trans(models.Model):
                     if allow_redeem_reward:
                         customer = self.env['rdm.customer'].browse(customer_id)
                         reward = self._get_reward(reward_id)
-                        if customer['point'] >= reward.point:
+                        if customer.point >= reward.point:
                             values.update({'point':reward.point})
                             values.update({'state':'open'})
                             result = super(rdm_reward_trans,self).write(values)

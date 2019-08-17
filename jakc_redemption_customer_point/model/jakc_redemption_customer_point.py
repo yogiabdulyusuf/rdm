@@ -25,8 +25,11 @@ class rdm_customer_point(models.Model):
     _description = 'Redemption Customer Point'
 
     @api.one
-    def trans_close(self):
-        self.state ='done'
+    def trans_close(self, point_id):
+        datas = self.env['rdm.customer.point'].search([('id','=',point_id),])
+        vals = {}
+        vals.update({'state': 'done'})
+        datas.write(vals)
 
     @api.one
     def trans_expired(self):
@@ -87,9 +90,9 @@ class rdm_customer_point(models.Model):
         total_point = 0
         sisa_point = point
         today = datetime.today()
-        args = [('customer_id','=', customer_id),('expired_date','>=', today),('state','=','active')]
-        point_ids = self.env['rdm.customer.point'].search(args, order='expired_date asc, id desc')
-
+        args = [('customer_id', '=', customer_id), ('expired_date', '>=', today), ('state', '=', 'active')]
+        point_ids = self.search(args, order='expired_date asc')
+        # point_ids = self.browse(ids)
         for point_id in point_ids:
             avai_point = point_id.point - point_id.usage
             if avai_point < sisa_point:
@@ -101,10 +104,7 @@ class rdm_customer_point(models.Model):
                 trans_data.update({'trans_type': 'reward'})
                 trans_data.update({'point': avai_point})
                 self.env['rdm.customer.point.detail'].deduct_point(trans_data)
-                vals = {}
-                vals.update({'usage': point_id.usage + avai_point})
-                # super(rdm_customer_point, self).write(vals)
-                point_ids.write(vals)
+                point_id.write({'usage': point_id.usage + avai_point})
                 self.trans_close(point_id.id)
             else:
                 total_point = total_point + sisa_point
@@ -114,10 +114,7 @@ class rdm_customer_point(models.Model):
                 trans_data.update({'trans_type': 'reward'})
                 trans_data.update({'point': sisa_point})
                 self.env['rdm.customer.point.detail'].deduct_point(trans_data)
-                vals = {}
-                vals.update({'usage': point_id.usage + avai_point})
-                # super(rdm_customer_point, self).write(vals)
-                point_ids.write(vals)
+                point_id.write({'usage': point_id.usage + sisa_point})
                 break
 
 
@@ -135,7 +132,7 @@ class rdm_customer_point_detail(models.Model):
 
     def get_point_usage(self, trans_id):
         sql_req = """SELECT sum(a.point) as total FROM rdm_customer_point_detail a
-                  WHERE (a.customer_point_id={0})""".format(trans_id)
+                  WHERE (a.customer_point_id='{}')""".format(trans_id)
     
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()

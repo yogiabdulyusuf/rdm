@@ -535,69 +535,69 @@ class rdm_schemas(models.Model):
     #     _logger.info("End Send Email Notification")
     
     
-    name =  fields.Char("Name", size=200, required=True)
-    type =  fields.Selection([("promo","Promo"),("point","Point")],"Type",readonly=True)
+    name        =  fields.Char(string="Name", size=200, required=True)
+    type        =  fields.Selection([("promo","Promo"),("point","Point")], string="Type", readonly=True)
     calculation =  fields.Selection(AVAILABLE_CALCULATION,"Calculation",size=16,required=True)
-    description =  fields.Text("Description",required=True)
-    desc_email =  fields.Text("Description For Email",required=True)
-    desc_sms =  fields.Char("Description For SMS", size=140,required=True)
+    description =  fields.Text(string="Description",required=True)
+    desc_email  =  fields.Text(string="Description For Email",required=True)
+    desc_sms    =  fields.Char(string="Description For SMS", size=140,required=True)
 
     #Periode
-    start_date =  fields.Date("Start Date",required=True)
-    end_date =  fields.Date("End Date",required=True)
-    last_redeem =  fields.Date("Last Redeem",required=True)
-    draw_date =  fields.Date("Draw Date",required=True, default=fields.Datetime.now)
+    start_date  =  fields.Date(string="Start Date",required=True)
+    end_date    =  fields.Date(string="End Date",required=True)
+    last_redeem =  fields.Date(string="Last Redeem",required=True)
+    draw_date   =  fields.Date(string="Draw Date",required=True, default=fields.Datetime.now)
         
         #Spend, coupon , point and reward
-    max_spend_amount =  fields.Float("Maximum Spend Amount", required=True, help="-1 for No Limit", default=-1)
-    max_spend_amount_global =  fields.Boolean("Global")
-    max_coupon =  fields.Integer("Maximum Coupon")
-    max_coupon_global =  fields.Boolean("Maximum Coupon Global")
-    max_point =  fields.Integer("Maximum Point")
-    max_point_global =  fields.Boolean("Maximum Point Global")
-    min_spend_amount =  fields.Float("Minimum Spend Amount", required=True, help="-1 for No Limit")
-    coupon_spend_amount =  fields.Float("Coupon Spend Amount",required=True)
-    point_spend_amount =  fields.Float("Point Spend Amount",required=True)
-    reward_spend_amount =  fields.Float("Reward Spend Amount", required=True, default=-1)
-    limit_coupon =  fields.Integer("Coupon Limit",help="-1 for No Limit",required=True, default=-1)
-    limit_coupon_per_periode =  fields.Integer("Coupon Limit Per Periode", help="-1 for No Limit",required=True, default=-1)
-    min_coupon =  fields.Integer("Minimum Coupon")
-    limit_point =  fields.Integer("Point Limit",help="-1 for No Limit",required=True, default=-1)
-    limit_point_per_periode =  fields.Integer("Point Limit Per Periode", help="-1 for No Limit", required=True, default=-1)
-    min_point =  fields.Integer("Minimum Point")
-    limit_reward =  fields.Integer("Reward Limit",help="-1 for No Limit",required=True, default=-1)
-    point_expired_date =  fields.Date("Point Expired Date")
+    max_spend_amount    =  fields.Float(string="Maximum Spend Amount", required=True, help="-1 for No Limit", default=-1)
+    max_spend_amount_global =  fields.Boolean(string="Global")
+    max_coupon          =  fields.Integer(string="Maximum Coupon")
+    max_coupon_global   =  fields.Boolean(string="Maximum Coupon Global")
+    max_point           =  fields.Integer(string="Maximum Point")
+    max_point_global    =  fields.Boolean(string="Maximum Point Global")
+    min_spend_amount    =  fields.Float(string="Minimum Spend Amount", required=False, help="-1 for No Limit")
+    coupon_spend_amount =  fields.Float(string="Coupon Spend Amount",required=True)
+    point_spend_amount  =  fields.Float(string="Point Spend Amount",required=True)
+    reward_spend_amount =  fields.Float(string="Reward Spend Amount", required=True, default=-1)
+    limit_coupon        =  fields.Integer(string="Coupon Limit",help="-1 for No Limit",required=True, default=-1)
+    limit_coupon_per_periode =  fields.Integer(string="Coupon Limit Per Periode", help="-1 for No Limit",required=True, default=-1)
+    min_coupon          =  fields.Integer(string="Minimum Coupon")
+    limit_point         =  fields.Integer(string="Point Limit",help="-1 for No Limit",required=True, default=-1)
+    limit_point_per_periode =  fields.Integer(string="Point Limit Per Periode", help="-1 for No Limit", required=True, default=-1)
+    min_point           =  fields.Integer(string="Minimum Point")
+    limit_reward        =  fields.Integer(string="Reward Limit",help="-1 for No Limit",required=True, default=-1)
+    point_expired_date  =  fields.Date(string="Point Expired Date")
 
 
     segment_ids =  fields.One2many("rdm.schemas.segment","schemas_id","Segment")
-    image1 =  fields.Binary("schemas Image")
+    image1      =  fields.Binary(string="schemas Image")
 
     #Bank Promo
-    bank_id =  fields.Many2one("rdm.bank","Bank Promo")
+    bank_id     = fields.Many2one(comodel_name="rdm.bank", string="Bank Promo", required=False, )
 
     #Customer Filter
-    gender_ids =  fields.One2many("rdm.schemas.gender","schemas_id","schemas Gender")
-    religion_ids =  fields.One2many("rdm.schemas.religion","schemas_id","schemas Religion")
-    ethnic_ids =  fields.One2many("rdm.schemas.ethnic","schemas_id","schemas Ethnic")
-    marital_ids =  fields.One2many("rdm.schemas.marital","schemas_id","schemas Marital")
-    interest_ids =  fields.One2many("rdm.schemas.interest","schemas_id","schemas Interest")
-    card_type_ids =  fields.One2many("rdm.schemas.card.type","schemas_id","schemas AYC Card Type")
+    gender_ids      = fields.One2many(comodel_name="rdm.schemas.gender", inverse_name="schemas_id", string="schemas Gender", required=False, )
+    religion_ids    = fields.One2many(comodel_name="rdm.schemas.religion", inverse_name="schemas_id", string="schemas Religion", required=False, )
+    ethnic_ids      = fields.One2many(comodel_name="rdm.schemas.ethnic", inverse_name="schemas_id", string="schemas Ethnic", required=False, )
+    marital_ids     = fields.One2many(comodel_name="rdm.schemas.marital", inverse_name="schemas_id", string="schemas Marital", required=False, )
+    interest_ids    = fields.One2many(comodel_name="rdm.schemas.interest", inverse_name="schemas_id", string="schemas Interest", required=False, )
+    card_type_ids   = fields.One2many(comodel_name="rdm.schemas.card.type", inverse_name="schemas_id", string="schemas AYC Card Type", required=False, )
 
     #Tenant Filter
-    tenant_ids =  fields.One2many("rdm.schemas.tenant","schemas_id","schemas Tenant")
-    tenant_category_ids =  fields.One2many("rdm.schemas.tenant.category","schemas_id","Tenant Category")
-    ayc_participant_ids =  fields.One2many("rdm.schemas.ayc.participant","schemas_id","AYC Participant")
+    tenant_ids          = fields.One2many(comodel_name="rdm.schemas.tenant", inverse_name="schemas_id", string="schemas Tenant", required=False, )
+    tenant_category_ids = fields.One2many(comodel_name="rdm.schemas.tenant.category", inverse_name="schemas_id", string="Tenant Category", required=False, )
+    ayc_participant_ids = fields.One2many(comodel_name="rdm.schemas.ayc.participant", inverse_name="schemas_id", string="AYC Participant", required=False, )
 
     #Rules List
-    rules_ids =  fields.One2many("rdm.schemas.rules","schemas_id","Rules")
+    rules_ids   = fields.One2many(comodel_name="rdm.schemas.rules", inverse_name="schemas_id", string="Rules", required=False, )
 
     #Blast List
-    blast_ids =  fields.One2many("rdm.schemas.blast","schemas_id","Blast")
+    blast_ids   = fields.One2many(comodel_name="rdm.schemas.blast", inverse_name="schemas_id", string="Blast", required=False, )
 
     #Receipt Header and Footer
-    receipt_header =  fields.Char("Receipt Header", size=50)
-    receipt_footer =  fields.Text("Receipt Footer")
-    state =   fields.Selection(AVAILABLE_STATES, "Status", size=16, readonly=True,  default="draft")
+    receipt_header =  fields.Char(string="Receipt Header", size=50)
+    receipt_footer =  fields.Text(string="Receipt Footer",)
+    state          =  fields.Selection(AVAILABLE_STATES, string="Status", size=16, readonly=True,  default="draft")
     
     @api.model
     def create(self, vals):

@@ -3,11 +3,34 @@
   <component name="ChangeListManager">
     <list default="true" id="c9f715b8-fa16-45c2-9668-c426222dcda4" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/model/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer_point.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer_point.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/jakc_redemption_point_adjustment/model/jakc_redemption_point_adj.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_point_adjustment/model/jakc_redemption_point_adj.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_point_scheduler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_point_scheduler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_point_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_point_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/__manifest__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/__manifest__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/__openerp__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/__openerp__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer_coupon.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer_coupon.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer_point.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer_point.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward_config.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward_config.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/security/ir.model.access.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_customer_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_customer_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_config_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_config_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_config_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_config_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_menu.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_menu.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_scheduler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_scheduler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_view.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -19,58 +42,81 @@
     <session id="1276247577">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="13" />
+          <entry key="project.closed" value="14" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.24" value="1" />
           <entry key="project.open.time.26" value="2" />
           <entry key="project.open.time.27" value="1" />
           <entry key="project.open.time.30" value="1" />
           <entry key="project.open.time.31" value="2" />
+          <entry key="project.open.time.35" value="1" />
           <entry key="project.open.time.36" value="1" />
           <entry key="project.open.time.4" value="2" />
           <entry key="project.open.time.41" value="1" />
           <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="16" />
+          <entry key="project.opened" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="csv" value="4" />
-          <entry key="py" value="113" />
-          <entry key="xml" value="53" />
+          <entry key="py" value="119" />
+          <entry key="xml" value="61" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="PLAIN_TEXT" value="4" />
-          <entry key="Python" value="113" />
-          <entry key="XML" value="53" />
+          <entry key="Python" value="119" />
+          <entry key="XML" value="61" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3991" />
-          <entry key="txt" value="24" />
+          <entry key="py" value="4425" />
+          <entry key="txt" value="38" />
           <entry key="xml" value="92" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="PLAIN_TEXT" value="24" />
-          <entry key="Python" value="3991" />
+          <entry key="PLAIN_TEXT" value="38" />
+          <entry key="Python" value="4425" />
           <entry key="XML" value="92" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py">
+        <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="642">
-              <caret line="185" column="14" lean-forward="true" selection-start-line="185" selection-start-column="14" selection-end-line="185" selection-end-column="14" />
+            <state relative-caret-position="85">
+              <caret line="5" column="72" lean-forward="true" selection-start-line="5" selection-start-column="72" selection-end-line="5" selection-end-column="72" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="579">
+              <caret line="221" column="14" selection-start-line="221" selection-start-column="14" selection-end-line="221" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-74">
+              <caret line="2185" column="54" lean-forward="true" selection-start-line="2184" selection-start-column="55" selection-end-line="2185" selection-end-column="54" />
+              <folding>
+                <element signature="e#0#36#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -78,20 +124,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="517" column="44" lean-forward="true" selection-start-line="517" selection-start-column="44" selection-end-line="517" selection-end-column="44" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer_point.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="413">
-              <caret line="110" column="31" lean-forward="true" selection-start-line="110" selection-start-column="31" selection-end-line="110" selection-end-column="31" />
+            <state relative-caret-position="476">
+              <caret line="459" column="44" lean-forward="true" selection-start-line="459" selection-start-column="44" selection-end-line="459" selection-end-column="44" />
               <folding>
                 <element signature="e#0#36#0" expanded="true" />
               </folding>
@@ -100,22 +134,19 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer.py">
+        <entry file="file://$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_schemas.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-              <folding>
-                <element signature="e#0#36#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="381">
+              <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml">
+        <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/view/jakc_redemption_schemas_view.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="90" lean-forward="true" selection-start-line="3" selection-start-column="90" selection-end-line="3" selection-end-column="90" />
+            <state relative-caret-position="3756">
+              <caret line="409" column="31" selection-start-line="409" selection-start-column="25" selection-end-line="409" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -124,18 +155,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>rdm.reward.goods</find>
-      <find>rdm.reward.trans</find>
-      <find>check_reward_stock</find>
-      <find>check_reward_limit_count</find>
-      <find>rdm.customer</find>
-      <find>_get_reward</find>
-      <find>str</find>
-      <find>str(reward_id)</find>
-      <find>_send_booking_notitication_to_customer</find>
-      <find>deduct_point(trans.trans_id.id, customer_id, trans.point)</find>
-      <find>rdm.reward</find>
-      <find>point</find>
       <find>trans_print</find>
       <find>_update_print_status</find>
       <find>bypass</find>
@@ -152,8 +171,20 @@
       <find>allow_redeem_reward</find>
       <find>get_trans</find>
       <find>_adjust_point_</find>
+      <find>trans_detail_ids</find>
+      <find>rdm.trans</find>
+      <find>rdm.trans.detail</find>
       <find>_send_notification_to_customer</find>
       <find>get_customer_total_point</find>
+      <find>min_spend_amount</find>
+      <find>tenant_filter</find>
+      <find>ir.sequence</find>
+      <find>trans_id</find>
+      <find>trans_generate</find>
+      <find>send_mail_to_customer</find>
+      <find>_set_trans_id</find>
+      <find>trans_close</find>
+      <find>_generate_coupon</find>
     </findStrings>
     <replaceStrings>
       <replace>self.env['rdm.trans.detail.point']</replace>
@@ -196,28 +227,28 @@
         <option value="$PROJECT_DIR$/jakc_redemption_customer/view/jakc_redemption_customer_view.xml" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer.py" />
-        <option value="$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_coupon/view/jakc_redemption_customer_view.xml" />
         <option value="$PROJECT_DIR$/jakc_redemption_trans_rule/view/jakc_redemption_trans_rule_view.xml" />
-        <option value="$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_reward/view/jakc_redemption_reward_view.xml" />
         <option value="$PROJECT_DIR$/jakc_redemption_draw/model/__init__.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_draw/__manifest__.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_draw/__init__.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_draw.py" />
-        <option value="$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_schemas.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_point_adjustment/model/jakc_redemption_point_adj.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer.py" />
         <option value="$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer_point.py" />
+        <option value="$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml" />
+        <option value="$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py" />
+        <option value="$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_schemas.py" />
+        <option value="$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-19" />
-    <option name="y" value="130" />
-    <option name="width" value="1609" />
+  <component name="ProjectFrameBounds">
+    <option name="y" value="14" />
+    <option name="width" value="1600" />
     <option name="height" value="802" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -226,6 +257,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -236,47 +268,29 @@
             <path>
               <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
               <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_customer_coupon" type="462c0819:PsiDirectoryNode" />
+              <item name="jakc_redemption_tenant" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
               <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_customer_coupon" type="462c0819:PsiDirectoryNode" />
+              <item name="jakc_redemption_trans" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="rdm" type="462c0819:PsiDirectoryNode" />
+              <item name="jakc_redemption_trans" type="462c0819:PsiDirectoryNode" />
               <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
               <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_customer_point" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_customer_point" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_customer_point" type="462c0819:PsiDirectoryNode" />
+              <item name="jakc_redemption_trans" type="462c0819:PsiDirectoryNode" />
               <item name="view" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_reward" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="rdm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="rdm" type="462c0819:PsiDirectoryNode" />
-              <item name="jakc_redemption_reward" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -313,14 +327,20 @@
       <option name="project" value="LOCAL" />
       <updated>1564741830792</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="update reward &amp; point">
+      <created>1565345649163</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1565345649163</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1616" height="876" extended-state="6" />
-    <editor active="true" />
+    <frame x="0" y="14" width="1600" height="802" extended-state="0" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20215462" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.20294495" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -331,7 +351,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Messages" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5025" side_tool="true" weight="0.3283582" />
+      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5025" side_tool="true" weight="0.32795697" />
       <window_info anchor="bottom" id="Python Console" order="9" />
       <window_info anchor="bottom" id="Terminal" order="10" />
       <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4975" weight="0.26115704" />
@@ -339,60 +359,27 @@
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
-    <layout-to-restore>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.252218" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32795697" />
-      <window_info anchor="bottom" id="Run" order="2" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="7" />
-      <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.5025" side_tool="true" weight="0.3283582" />
-      <window_info anchor="bottom" id="Python Console" order="9" />
-      <window_info anchor="bottom" id="Terminal" order="10" />
-      <window_info anchor="bottom" id="Version Control" order="11" sideWeight="0.4975" weight="0.26115704" />
-      <window_info anchor="right" id="Commander" order="0" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
-    </layout-to-restore>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="update tgl 2-Agust-2019" />
-    <option name="LAST_COMMIT_MESSAGE" value="update tgl 2-Agust-2019" />
+    <MESSAGE value="update reward &amp; point" />
+    <option name="LAST_COMMIT_MESSAGE" value="update reward &amp; point" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py</url>
-          <line>433</line>
+          <line>352</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer/view/jakc_redemption_customer_config_view.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans_rule/security/ir.model.access.csv">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-340">
-          <caret line="10" column="47" lean-forward="true" selection-start-line="10" selection-start-column="47" selection-end-line="10" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/__openerp__.py" />
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_point_scheduler.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_customer/security/ir.model.access.csv">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -446,13 +433,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1981">
-          <caret line="481" column="46" selection-start-line="481" selection-start-column="46" selection-end-line="481" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_trans_rule/model/jakc_redemption_trans_rule.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1530">
@@ -466,20 +446,10 @@
     <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_config_view.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_reward_view.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_tenant/model/jakc_redemption_tenant.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-395">
           <caret line="20" column="38" selection-start-line="20" selection-start-column="38" selection-end-line="20" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/view/jakc_redemption_schemas_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="409" column="31" selection-start-line="409" selection-start-column="25" selection-end-line="409" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -511,20 +481,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="27" column="53" selection-start-line="27" selection-start-column="53" selection-end-line="27" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="222">
-          <caret line="310" column="31" selection-start-line="310" selection-start-column="25" selection-end-line="310" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-8560">
-          <caret line="260" column="50" selection-start-line="260" selection-start-column="50" selection-end-line="260" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -581,13 +537,6 @@
     <entry file="file://$PROJECT_DIR$/jakc_redemption_draw/view/jakc_redemption_schemas_view.xml">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_schemas.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="18" column="67" selection-start-line="18" selection-start-column="67" selection-end-line="18" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_draw.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
@@ -626,10 +575,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
           <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-            <marker date="1565252873002" expanded="true" signature="2560:2569" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -640,13 +585,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="642">
-          <caret line="185" column="14" lean-forward="true" selection-start-line="185" selection-start-column="14" selection-end-line="185" selection-end-column="14" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_customer_point.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -654,37 +592,95 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="90" lean-forward="true" selection-start-line="3" selection-start-column="90" selection-end-line="3" selection-end-column="90" />
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_reward_view.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="517" column="44" lean-forward="true" selection-start-line="517" selection-start-column="44" selection-end-line="517" selection-end-column="44" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_customer_view.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_customer_coupon_view.xml">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
-          <caret line="23" lean-forward="true" selection-start-line="23" selection-end-line="23" />
-          <folding>
-            <element signature="e#0#36#0" expanded="true" />
-          </folding>
+          <caret line="23" selection-start-line="23" selection-end-line="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/view/jakc_redemption_customer_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="90" selection-start-line="3" selection-start-column="90" selection-end-line="3" selection-end-column="90" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_coupon/model/jakc_redemption_customer_coupon.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="642">
+          <caret line="185" column="14" selection-start-line="185" selection-start-column="14" selection-end-line="185" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/jakc_redemption_customer_point/model/jakc_redemption_customer_point.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="413">
-          <caret line="110" column="31" lean-forward="true" selection-start-line="110" selection-start-column="31" selection-end-line="110" selection-end-column="31" />
+        <state relative-caret-position="1377">
+          <caret line="105" column="39" selection-start-line="105" selection-start-column="39" selection-end-line="105" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://D:/redemption/jakc_redemption_trans/jakc_redemption_trans_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="863">
+          <caret line="268" column="70" selection-start-line="268" selection-start-column="59" selection-end-line="268" selection-end-column="70" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/view/jakc_redemption_schemas_scheduler.xml">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/view/jakc_redemption_schemas_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3756">
+          <caret line="409" column="31" selection-start-line="409" selection-start-column="25" selection-end-line="409" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_draw/model/jakc_redemption_schemas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="381">
+          <caret line="33" column="37" selection-start-line="33" selection-start-column="37" selection-end-line="33" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_schemas/model/jakc_redemption_schemas.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="579">
+          <caret line="221" column="14" selection-start-line="221" selection-start-column="14" selection-end-line="221" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/view/jakc_redemption_trans_view.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="5" column="72" lean-forward="true" selection-start-line="5" selection-start-column="72" selection-end-line="5" selection-end-column="72" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_reward/model/jakc_redemption_reward.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="459" column="44" lean-forward="true" selection-start-line="459" selection-start-column="44" selection-end-line="459" selection-end-column="44" />
+          <folding>
+            <element signature="e#0#36#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/jakc_redemption_trans/model/jakc_redemption_trans.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-74">
+          <caret line="2185" column="54" lean-forward="true" selection-start-line="2184" selection-start-column="55" selection-end-line="2185" selection-end-column="54" />
           <folding>
             <element signature="e#0#36#0" expanded="true" />
           </folding>

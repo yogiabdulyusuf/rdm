@@ -45,7 +45,7 @@
 						<notebook colspan="4">
 	                        <page string="Details">
 	                            <field name="trans_detail_ids" widget="one2many_list" nolabel="1">
-	                                <tree colors="red:tenant_filter==True;">
+	                                <tree>
 	                                    <field name="trans_date"/>
 	                                    <field name="tenant_id"/>
 	                                    <field name="total_amount" widget="monetary"/>
@@ -54,7 +54,7 @@
 	                                    <field name="bank_id"/>
 	                                    <field name="bank_card_id"/>                                    
 	                                    <field name="card_number"/>
-	                                    <field name="tenant_filter" attrs="{'invisible': True}"/>
+	                                    <!--<field name="tenant_filter" attrs="{'invisible': True}"/>-->
 	                                    <field name="state"/>
 	                                </tree>
 	                            </field>

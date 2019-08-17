@@ -52,7 +52,7 @@ class rdm_trans(models.Model):
         values = {}
         values.update({'state':'done'})
         self.write(values)
-        return True
+
     
     @api.one
     def process_close(self):
@@ -65,7 +65,7 @@ class rdm_trans(models.Model):
             config = self.env.user.company_id
             for rdm_config in config:
                 if rdm_config.enable_email and trans.customer_id.receive_email:
-                    self.send_mail_to_customer(self.trans_id)
+                    self.send_mail_to_customer(self.customer_id)
                 return True
     @api.one
     def _update_print_status(self):
@@ -214,7 +214,7 @@ class rdm_trans(models.Model):
             config = self.env.user.company_id
 
             for rdm_config in config:
-                approver = self.env['hr.employee'].browse([rdm_config.trans_delete_approver])[0]
+                approver = self.env['hr.employee'].browse(rdm_config.trans_delete_approver)
                 if approver.user_id.id == trans.uid:
                     trans_detail_ids = trans.trans_detail_ids
                     for trans_detail in trans_detail_ids:
@@ -258,7 +258,7 @@ class rdm_trans(models.Model):
             config = self.env.user.company_id
 
             for rdm_config in config:
-                approver = self.env['hr.employee'].browse([rdm_config.trans_delete_approver])[0]
+                approver = self.env['hr.employee'].browse(rdm_config.trans_delete_approver)
                 if approver.user_id.id == trans.uid:
 
                     trans_detail_ids = trans.trans_detail_ids
@@ -512,12 +512,13 @@ class rdm_trans(models.Model):
         # trans = self._get_trans(trans_id, context)
         for trans in self:
             if trans.type == 'promo':
-                trans_seq_id = self.env['ir.sequence'].get('rdm.trans.redemption.sequence'),
+                trans_seq_id = self.env['ir.sequence'].next_by_code('rdm.trans.redemption.sequence')
             if trans.type == 'point':
-                trans_seq_id = self.env['ir.sequence'].get('rdm.trans.point.sequence'),
-            trans_data = {}
-            trans_data.update({'trans_id':trans_seq_id[0]})
-            super(rdm_trans,self).write(trans_data)
+                trans_seq_id = self.env['ir.sequence'].next_by_code('rdm.trans.point.sequence')
+            # trans_data = {}
+            # trans_data.update({'trans_id':trans_seq_id[0]})
+            # super(rdm_trans,self).write(trans_data)
+            trans.trans_id = trans_seq_id
             _logger.info('End Set Trans ID Filter')
 
     @api.one
@@ -2173,11 +2174,11 @@ class rdm_trans(models.Model):
             trans_data = {}
             trans_data.update({'total_coupon':ditotal_coupon + terbesar_coupon})
             trans_data.update({'total_point':ditotal_point + terbesar_point})
-            self.env('rdm.trans').write(trans_data)
+            self.env['rdm.trans'].write(trans_data)
         _logger.info('End Calculate Total Coupon and Point')
 
     @api.one
-    def _generate_coupon(self):
+    def _generate_coupon(self, trans_id):
         _logger.info('Start Generate Coupon')
         # trans = self._get_trans(trans_id, context)
         for trans in self:
@@ -2279,28 +2280,26 @@ class rdm_trans(models.Model):
     #         }))
     #     mail_mail.send(mail_ids)
     #     _logger.info('End Send Email Notification')
-    #
-    # def send_mail_to_customer(self):
-    #     #res_id = self.read( ['boq_item_ids'], context)[0]['id']
-    #     trans_id = ids[0]
-    #     trans = self._get_trans(trans_id, context)
-    #     email_obj = self.env('email.template')
-    #     template_ids = email_obj.search([('name', '=', 'Redemption Trans Notification')])
-    #     email = email_obj.browse(template_ids[0])
-    #     email_obj.write(template_ids, {'email_from': email.email_from,
-    #                                             'email_to': email.email_to,
-    #                                             'subject': email.subject,
-    #                                             'body_html': email.body_html,
-    #                                             'email_recipients': email.email_recipients})
-    #     email_obj.send_mail(template_ids[0], trans.id, True)
+
+    def send_mail_to_customer(self, customer_id):
+        #res_id = self.read( ['boq_item_ids'], context)[0]['id']
+        # trans_id = ids[0]
+        # trans = self._get_trans(trans_id, context)
+        for trans in self:
+            args = [('name', '=', 'Redemption Trans Notification')]  # CHANGE
+            template_ids = self.env['mail.template'].search(args)
+            vals = {}
+            vals.update({'email_to': customer_id.email})
+            template_ids.write(vals)
+            template_ids[0].sudo().send_mail(trans.id, force_send=True)
 
     @api.one
     def current_total_amount(self, customer_id):
         today = datetime.datetime.now()
-        sql_req = '''select sum(b.total_amount) as total_amount from rdm_trans a
+        sql_req = """select sum(b.total_amount) as total_amount from rdm_trans a
                     left join rdm_trans_detail b on a.id = b.trans_id
                     left join rdm_customer c on a.customer_id = c.id
-                    WHERE a.customer_id={0} AND a.trans_date = '{1}' AND b.state='done' '''.format(customer_id.id, today.strftime('%Y-%m-%d'))
+                    WHERE a.customer_id='{}' AND a.trans_date = '{}' AND b.state='done' """.format(customer_id.id, today.strftime('%Y-%m-%d'))
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2316,10 +2315,10 @@ class rdm_trans(models.Model):
     @api.one
     def daily_total_amount(self, schemas_id, customer_id):
         today = datetime.datetime.now()
-        sql_req = '''select sum(b.total_amount) as total_amount from rdm_trans a
+        sql_req = """select sum(b.total_amount) as total_amount from rdm_trans a
                     left join rdm_trans_detail b on a.id = b.trans_id
                     left join rdm_customer c on a.customer_id = c.id
-                    WHERE a.customer_id={0} AND a.trans_date = '{1}' AND b.state='done' '''.format(customer_id.id, today.strftime('%Y-%m-%d'))
+                    WHERE a.customer_id='{}' AND a.trans_date = '{}' AND b.state='done' """.format(customer_id.id, today.strftime('%Y-%m-%d'))
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2334,7 +2333,7 @@ class rdm_trans(models.Model):
 
     @api.one
     def periode_total_coupon(self, schemas_id, customer_id):
-        sql_req = '''
+        sql_req = """
                 SELECT
                   sum(rdm_trans_schemas.total_coupon) as total_coupon
                 FROM
@@ -2342,10 +2341,10 @@ class rdm_trans(models.Model):
                   public.rdm_trans_schemas
                 WHERE
                   rdm_trans_schemas.trans_id = rdm_trans.id AND
-                  rdm_trans.customer_id = {0} AND
-                  rdm_trans_schemas.schemas_id = {1} AND
+                  rdm_trans.customer_id = '{}' AND
+                  rdm_trans_schemas.schemas_id ='{}' AND
                   rdm_trans.state = 'done'
-            '''.format(customer_id.id,schemas_id.id)
+            """.format(customer_id.id,schemas_id.id)
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2361,7 +2360,7 @@ class rdm_trans(models.Model):
     @api.one
     def daily_total_coupon(self, schemas_id, customer_id):
         today = datetime.datetime.now()
-        sql_req = '''
+        sql_req = """
                 SELECT
                   sum(rdm_trans_schemas.total_coupon) as total_coupon
                 FROM
@@ -2369,11 +2368,11 @@ class rdm_trans(models.Model):
                   public.rdm_trans_schemas
                 WHERE
                   rdm_trans_schemas.trans_id = rdm_trans.id AND
-                  rdm_trans.customer_id = {0} AND
-                  rdm_trans_schemas.schemas_id = {1} AND
-                  rdm_trans.trans_date = '{2}' AND
+                  rdm_trans.customer_id = '{}' AND
+                  rdm_trans_schemas.schemas_id = '{}' AND
+                  rdm_trans.trans_date = '{}' AND
                   rdm_trans.state = 'done'
-            '''.format(customer_id.id,schemas_id.id,today.strftime('%Y-%m-%d'))
+            """.format(customer_id.id,schemas_id.id,today.strftime('%Y-%m-%d'))
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2388,7 +2387,7 @@ class rdm_trans(models.Model):
 
     @api.one
     def periode_total_point(self, schemas_id, customer_id):
-        sql_req = '''
+        sql_req = """
                 SELECT
                   sum(rdm_trans_schemas.total_point) as total_point
                 FROM
@@ -2396,10 +2395,10 @@ class rdm_trans(models.Model):
                   public.rdm_trans_schemas
                 WHERE
                   rdm_trans_schemas.trans_id = rdm_trans.id AND
-                  rdm_trans.customer_id = {0} AND
-                  rdm_trans_schemas.schemas_id = {1} AND
+                  rdm_trans.customer_id = '{}' AND
+                  rdm_trans_schemas.schemas_id = '{}' AND
                   rdm_trans.state = 'done'
-            '''.format(customer_id.id,schemas_id.id)
+            """.format(customer_id.id,schemas_id.id)
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2415,7 +2414,7 @@ class rdm_trans(models.Model):
     @api.one
     def daily_total_point(self, schemas_id, customer_id):
         today = datetime.datetime.now()
-        sql_req = '''
+        sql_req = """
                 SELECT
                   sum(rdm_trans_schemas.total_point) as total_point
                 FROM
@@ -2423,11 +2422,11 @@ class rdm_trans(models.Model):
                   public.rdm_trans_schemas
                 WHERE
                   rdm_trans_schemas.trans_id = rdm_trans.id AND
-                  rdm_trans.customer_id = {0} AND
-                  rdm_trans_schemas.schemas_id = {1} AND
-                  rdm_trans.trans_date = '{2}' AND
+                  rdm_trans.customer_id = '{}' AND
+                  rdm_trans_schemas.schemas_id = '{}' AND
+                  rdm_trans.trans_date = '{}' AND
                   rdm_trans.state = 'done'
-            '''.format(customer_id.id, schemas_id.id,today.strftime('%Y-%m-%d'))
+            """.format(customer_id.id, schemas_id.id,today.strftime('%Y-%m-%d'))
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2443,7 +2442,7 @@ class rdm_trans(models.Model):
     @api.one
     def transactions_total_amount(self, trans_id, schemas_id, customer_id):
         today = datetime.datetime.now()
-        sql_req = '''SELECT
+        sql_req = """SELECT
                     sum(rdm_trans_detail.total_amount) as total_amount
                  FROM
                     public.rdm_trans,
@@ -2456,12 +2455,12 @@ class rdm_trans(models.Model):
                   rdm_trans_schemas.trans_id = rdm_trans.id AND
                   rdm_trans_schemas.schemas_id = rdm_schemas.id AND
                   rdm_trans_detail.trans_id = rdm_trans.id AND
-                  rdm_customer.id = {0} AND
-                  rdm_schemas.id = {1} AND
-                  rdm_trans.trans_date = '{2}' AND
+                  rdm_customer.id = '{}' AND
+                  rdm_schemas.id = '{}' AND
+                  rdm_trans.trans_date = '{}' AND
                   rdm_trans_detail.state = 'done' AND
-                  rdm_trans.id != {3}
-            '''.format(customer_id.id,schemas_id.id,today.strftime('%Y-%m-%d'), trans_id.id)
+                  rdm_trans.id != '{}'
+            """.format(customer_id.id,schemas_id.id,today.strftime('%Y-%m-%d'), trans_id.id)
 
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
@@ -2502,13 +2501,13 @@ class rdm_trans(models.Model):
     total_coupon = fields.Integer('Total Coupon', readonly=True, default=0)
     total_point = fields.Integer('Total Point', readonly=True, default=0)
     state = fields.Selection(AVAILABLE_STATES, 'Status', size=16, readonly=True, default="draft")
-    trans_detail_ids = fields.One2many('rdm.trans.detail','trans_id','Details')
-    trans_detail_coupon_ids = fields.One2many('rdm.trans.detail.coupon','trans_id','Coupon Details')
-    trans_detail_point_ids = fields.One2many('rdm.trans.detail.coupon','trans_id','Point Details')
-    trans_schemas_ids = fields.One2many('rdm.trans.schemas','trans_id','Schemas')
-    customer_coupon_ids = fields.One2many('rdm.customer.coupon','trans_id','Coupons')
-    customer_point_ids = fields.One2many('rdm.customer.point','trans_id','Points')
-    customer_reward_ids = fields.One2many('rdm.reward.trans','trans_id','Rewards')
+    trans_detail_ids = fields.One2many(comodel_name="rdm.trans.detail", inverse_name="trans_id", string="Details", required=False, )
+    trans_detail_coupon_ids = fields.One2many(comodel_name="rdm.trans.detail.coupon", inverse_name="trans_id", string="Coupon Details", required=False, )
+    trans_detail_point_ids = fields.One2many(comodel_name="rdm.trans.detail.coupon", inverse_name="trans_id", string="Point Details", required=False, )
+    trans_schemas_ids = fields.One2many(comodel_name="rdm.trans.schemas", inverse_name="trans_id", string="Schemas", required=False, )
+    customer_coupon_ids = fields.One2many(comodel_name="rdm.customer.coupon", inverse_name="trans_id", string="Coupons", required=False, )
+    customer_point_ids = fields.One2many(comodel_name="rdm.customer.point", inverse_name="trans_id", string="Points", required=False, )
+    customer_reward_ids = fields.One2many(comodel_name="rdm.reward.trans", inverse_name="trans_id", string="Rewards", required=False, )
     remark = fields.Text('Remark',readonly=True)
     printed = fields.Boolean('Printed', readonly=True, default=False)
     reprint = fields.Integer('Reprint', readonly=True, default=0)
@@ -2601,19 +2600,19 @@ class rdm_trans_detail(models.Model):
 
     trans_id = fields.Many2one('rdm.trans','Transaction', required=True)
     tenant_id = fields.Many2one('rdm.tenant','Tenant',required=True)
-    tenant_filter = fields.Boolean('Tenant Filter', default=False)
+    tenant_filter = fields.Boolean(string="Tenant Filter",  default=False)
     trans_date = fields.Date('Date',required=True, default=fields.Datetime.now)
     total_amount = fields.Float('Total Amount',required=True)
     valid_amount = fields.Float('Valid Amount', readonly=True)
     total_item = fields.Integer('Total Item')
     payment_type = fields.Selection([('cash','Cash'),('creditcard','Credit Card'),('debit','Debit')],'Payment Type',required=True, default="cash")
-    bank_id = fields.Many2one('rdm.bank','Bank')
-    bank_card_id = fields.Many2one('rdm.bank.card','Bank Card')
+    bank_id = fields.Many2one(comodel_name="rdm.bank", string="Bank", required=False, )
+    bank_card_id = fields.Many2one(comodel_name="rdm.bank.card", string="Bank Card", required=False, )
     card_number = fields.Char('Card Number', size=20)
-    trans_detail_coupon_ids = fields.One2many('rdm.trans.detail.coupon','trans_detail_id','Coupons')
-    trans_detail_point_ids = fields.One2many('rdm.trans.detail.point','trans_detail_id','Points')
+    trans_detail_coupon_ids = fields.One2many(comodel_name="rdm.trans.detail.coupon", inverse_name="trans_detail_id", string="Coupons", required=False, )
+    trans_detail_point_ids = fields.One2many(comodel_name="rdm.trans.detail.point", inverse_name="trans_detail_id", string="Points", required=False, )
     state =  fields.Selection(AVAILABLE_STATES, 'Status', size=16, readonly=True, default="open")
-    deleted = fields.Boolean('Deleted')
+    deleted = fields.Boolean(string="Deleted",  )
 
     @api.multi
     def unlink(self):
@@ -2628,7 +2627,7 @@ class rdm_trans_detail_coupon(models.Model):
 
     @api.one
     def total_coupon(self):
-        sql_req= "SELECT sum(c.coupon) as total FROM rdm_trans_detail_coupon c WHERE c.trans_schemas_id=" + str(self.trans_schemas_id)
+        sql_req= "SELECT sum(c.coupon) as total FROM rdm_trans_detail_coupon c WHERE c.trans_schemas_id='" + str(self.trans_schemas_id) + "'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
         total_coupon = sql_res['total']
@@ -2656,7 +2655,7 @@ class rdm_trans_detail_point(models.Model):
     
     @api.one
     def total_point(self):
-        sql_req= "SELECT sum(c.point) as total FROM rdm_trans_detail_point c WHERE c.trans_schemas_id=" + str(self.trans_schemas_id)
+        sql_req= "SELECT sum(c.point) as total FROM rdm_trans_detail_point c WHERE c.trans_schemas_id='" + str(self.trans_schemas_id) + "'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
         total_point = sql_res['total']
@@ -2684,10 +2683,10 @@ class rdm_trans_detail_reward(models.Model):
     _name = "rdm.trans.detail.reward"
     _description = "Redemption Transaction Detail Reward"
 
-    trans_detail_id = fields.Many2one('rdm.trans.detail','Transaction Detail')
-    trans_schemas_id = fields.Many2one('rdm.trans.schemas','Transaction Schemas')      
-    reward_id = fields.Many2one('rdm.reward','Reward')
-    quantity = fields.Integer('Quantity')
+    trans_detail_id = fields.Many2one(comodel_name="rdm.trans.detail", string="Transaction Detail", required=False, )
+    trans_schemas_id = fields.Many2one(comodel_name="rdm.trans.schemas", string="Transaction Schemas", required=False, )
+    reward_id = fields.Many2one(comodel_name="rdm.reward", string="Reward", required=False, )
+    quantity = fields.Integer(string="Quantity", required=False, )
 
 
 class rdm_trans_detail_below_min_spend_amount(models.Model):
@@ -2695,9 +2694,9 @@ class rdm_trans_detail_below_min_spend_amount(models.Model):
     _description = "Redemption Transaction Detail Below Min Spend Amount"
 
     trans_id = fields.Many2one('rdm.trans', 'Transaction')
-    trans_detail_id = fields.Many2one('rdm.trans.detail','Transaction Detail')
-    trans_schemas_id = fields.Many2one('rdm.trans.schemas','Transaction Schemas')
-    below_min_spend_amount = fields.Boolean('bsma')                
+    trans_detail_id = fields.Many2one(comodel_name="rdm.trans.detail", string="Transaction Detail", required=False, )
+    trans_schemas_id = fields.Many2one(comodel_name="rdm.trans.schemas", string="Transaction Schemas", required=False, )
+    below_min_spend_amount = fields.Boolean(string="bsma",  )
 
 
 class rdm_trans_schemas(models.Model):
@@ -2710,8 +2709,8 @@ class rdm_trans_schemas(models.Model):
     total_point = fields.Integer('Total Point', readonly=True, default=0)
     trans_filter = fields.Boolean('Filter', readonly=True, default=False)
     trans_valid = fields.Boolean('Valid', readonly=True, default=False)
-    remark = fields.Text('Remark',readonly=True) 
-    trans_detail_coupon_ids = fields.One2many('rdm.trans.detail.coupon','trans_schemas_id','Schemas Coupon')
-    trans_detail_point_ids = fields.One2many('rdm.trans.detail.point','trans_schemas_id','Schemas Point')                      
+    remark = fields.Text('Remark',readonly=True)
+    trans_detail_coupon_ids = fields.One2many(comodel_name="rdm.trans.detail.coupon", inverse_name="trans_schemas_id", string="Schemas Coupon", required=False, )
+    trans_detail_point_ids = fields.One2many(comodel_name="rdm.trans.detail.point", inverse_name="trans_schemas_id", string="Schemas Point", required=False, )
     state = fields.Selection(AVAILABLE_STATES,'Status', size=16, readonly=True)
 
