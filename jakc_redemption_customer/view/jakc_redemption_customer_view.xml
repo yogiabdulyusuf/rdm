@@ -100,16 +100,39 @@
         </record>
         
         
-		<record model="ir.ui.view" id="view_rdm_customer_graph">
+		<!--<record model="ir.ui.view" id="view_rdm_customer_graph">-->
+            <!--<field name="name">rdm.customer.graph</field>-->
+            <!--<field name="model">rdm.customer</field>-->
+            <!--<field name="type">graph</field>-->
+            <!--<field name="arch" type="xml">-->
+                <!--<graph string="Customer" orientation="horizontal" type="bar">-->
+                    <!--<field name="zone" group="True"/>                    -->
+                <!--</graph>-->
+            <!--</field>-->
+        <!--</record>-->
+
+        <record model="ir.ui.view" id="graph_rdm_customer">
             <field name="name">rdm.customer.graph</field>
             <field name="model">rdm.customer</field>
-            <field name="type">graph</field>
             <field name="arch" type="xml">
-                <graph string="Customer" orientation="horizontal" type="bar">
-                    <field name="zone" group="True"/>                    
-                </graph>
+                <graph string="Graph" orientation="horizontal" type="bar">
+                    <!--<field name="stiker_id" type="row"/>-->
+                    <!--<field name="jenis_transaksi" type="col"/>-->
+                    <field name="card_type" group="True"/>
+               </graph>
             </field>
-        </record>  		
+        </record>
+
+        <record model="ir.ui.view" id="pivot_rdm_customer">
+            <field name="name">rdm.customer.pivot</field>
+            <field name="model">rdm.customer</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot">
+                    <field name="state" type="row"/>
+                    <field name="card_type" type="col"/>
+               </pivot>
+            </field>
+        </record>
 
         <!-- RDM/ACTION -->
         <!-- CUSTOMER -->
@@ -130,15 +153,14 @@
                    <filter string="Disable" name="disable_customer" domain="[('state','=','disable')]"/>
                </search>
             </field>
-        </record>    
-        
-		<record model="ir.actions.act_window" id="action_rdm_customer">
-            <field name="name">Customer</field>           
-            <field name="type">ir.actions.act_window</field>
+        </record>
+
+        <record id="action_rdm_customer" model="ir.actions.act_window">
+            <field name="name">Customer</field>
             <field name="res_model">rdm.customer</field>
-            <field name="view_mode">tree,form</field>		
-			<field name="context">{"search_default_contact_type_customer":1}</field>            
-           	<field name="search_view_id" ref="view_rdm_customer_filter"/>           
+            <field name="view_type">form</field>
+            <field name="context">{"search_default_contact_type_customer":1}</field>
+            <field name="view_mode">tree,form,graph,pivot</field>
             <field name="help" type="html">
               <p class="oe_view_nocontent_create">
                 Click to add a contact in your address book.
@@ -148,22 +170,37 @@
                 documents, etc.
               </p>
             </field>
-        </record>	
+        </record>
         
-        
-		<record model="ir.actions.act_window.view" id="action_rdm_customer_tree" >
-            <field name="sequence" eval="0"/>
-            <field name="view_mode">tree</field>
-            <field name="view_id" ref="view_rdm_customer_tree"/>             			        
-            <field name="act_window_id" ref="action_rdm_customer"/>
-        </record>        
-        
-        <record model="ir.actions.act_window.view" id="action_rdm_customer_form" >
-            <field name="sequence" eval="1"/>
-            <field name="view_mode">form</field>
-            <field name="view_id" ref="view_rdm_customer_form"/>             		            		          
-            <field name="act_window_id" ref="action_rdm_customer"/>
-        </record>                         
+		<!--<record model="ir.actions.act_window" id="action_rdm_customer">-->
+            <!--<field name="name">Customer</field>           -->
+            <!--<field name="type">ir.actions.act_window</field>-->
+            <!--<field name="res_model">rdm.customer</field>-->
+            <!--<field name="view_mode">tree,form</field>		-->
+			<!--<field name="context">{"search_default_contact_type_customer":1}</field>            -->
+           	<!--<field name="search_view_id" ref="view_rdm_customer_filter"/>           -->
+            <!--<field name="help" type="html">-->
+              <!--<p class="oe_view_nocontent_create">-->
+                <!--Click to add a contact in your address book.-->
+              <!--</p><p>-->
+                <!--OpenERP helps you easily track all activities related to-->
+                <!--a customer; discussions, history of business opportunities,-->
+                <!--documents, etc.-->
+              <!--</p>-->
+            <!--</field>-->
+        <!--</record>-->
+		<!--<record model="ir.actions.act_window.view" id="action_rdm_customer_tree" >-->
+            <!--<field name="sequence" eval="0"/>-->
+            <!--<field name="view_mode">tree</field>-->
+            <!--<field name="view_id" ref="view_rdm_customer_tree"/>             			        -->
+            <!--<field name="act_window_id" ref="action_rdm_customer"/>-->
+        <!--</record>-->
+        <!--<record model="ir.actions.act_window.view" id="action_rdm_customer_form" >-->
+            <!--<field name="sequence" eval="1"/>-->
+            <!--<field name="view_mode">form</field>-->
+            <!--<field name="view_id" ref="view_rdm_customer_form"/>             		            		          -->
+            <!--<field name="act_window_id" ref="action_rdm_customer"/>-->
+        <!--</record>                         -->
 
 
     </data>

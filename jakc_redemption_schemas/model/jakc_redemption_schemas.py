@@ -207,7 +207,7 @@ class rdm_schemas_blast(models.Model):
                                      "rdm_customer_id",
                                      "rdm_schemas_blast_id",
                                      string = "Customers")
-    schedule =  fields.Datetime("Schedule",required=True) 
+    schedule =  fields.Datetime(string="Schedule",required=True)
     type =  fields.Selection(AVAILABLE_TYPE_STATES,"Type", size=16, required=True)
     blast_detail_ids =  fields.One2many("rdm.schemas.blast.detail","blast_id", readonly=True)
     state =  fields.Selection(AVAILABLE_BLAST_STATES, "Status", size=16, readonly=True, default="draft")
@@ -400,33 +400,26 @@ class rdm_schemas(models.Model):
     @api.one
     def trans_review(self):
         self.state = "review"
-        #Send Email To Manager  
-        return True
 
     @api.one
     def trans_start(self):
         self.state = "open"
-        return True
 
     @api.one
     def trans_pause(self):
         self.state = "pause"
-        return True
 
     @api.one
     def trans_close(self):
         self.state = "done"
-        return True
 
     @api.one
     def trans_reset(self):
         self.state = "open"
-        return True
 
     @api.one
     def trans_waiting(self):
         self.state = "waiting"
-        return True
     
     
     def active_schemas(self):
@@ -443,15 +436,13 @@ class rdm_schemas(models.Model):
         return True
     
     def active_promo_schemas(self):
-        ids = {}
         today = datetime.now().strftime("%Y-%m-%d")
-        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","promo"),("start_date","<=",today),("end_date",">=", today)]).browse()
+        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","promo"),("start_date","<=",today),("end_date",">=", today)])
         return ids
     
     def active_point_schemas(self):
-        ids = {}
         today = datetime.now().strftime("%Y-%m-%d")
-        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","point"),("start_date","<=",today),("end_date",">=", today)]).browse()
+        ids = self.env["rdm.schemas"].search([("state","=","open"),("type","=","point"),("start_date","<=",today),("end_date",">=", today)])
         return ids
     
     @api.one
@@ -546,7 +537,7 @@ class rdm_schemas(models.Model):
     start_date  =  fields.Date(string="Start Date",required=True)
     end_date    =  fields.Date(string="End Date",required=True)
     last_redeem =  fields.Date(string="Last Redeem",required=True)
-    draw_date   =  fields.Date(string="Draw Date",required=True, default=fields.Datetime.now)
+    draw_date   =  fields.Date(string="Draw Date",required=True, default=lambda self: fields.datetime.now())
         
         #Spend, coupon , point and reward
     max_spend_amount    =  fields.Float(string="Maximum Spend Amount", required=True, help="-1 for No Limit", default=-1)
@@ -565,6 +556,7 @@ class rdm_schemas(models.Model):
     limit_point         =  fields.Integer(string="Point Limit",help="-1 for No Limit",required=True, default=-1)
     limit_point_per_periode =  fields.Integer(string="Point Limit Per Periode", help="-1 for No Limit", required=True, default=-1)
     min_point           =  fields.Integer(string="Minimum Point")
+    rdm_reward_ids      =  fields.Many2one(comodel_name="rdm.reward", string="Redeem Reward", required=False, )
     limit_reward        =  fields.Integer(string="Reward Limit",help="-1 for No Limit",required=True, default=-1)
     point_expired_date  =  fields.Date(string="Point Expired Date")
 
@@ -607,7 +599,7 @@ class rdm_schemas(models.Model):
                     raise ValidationError("Point Expired Date Required!")
     
         id =  super(rdm_schemas, self).create(vals)
-        self.trans_waiting()
+        id.trans_waiting()
         return id
 
     @api.multi

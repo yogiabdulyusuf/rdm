@@ -6,6 +6,7 @@
     "depends" : ["base_setup","base","jakc_redemption","jakc_redemption_customer"],
     "init_xml" : [],
     "data" : [
+        "data/ir_sequence.xml",
         "view/jakc_redemption_customer_coupon_view.xml",
         "view/jakc_redemption_customer_view.xml",
     ],

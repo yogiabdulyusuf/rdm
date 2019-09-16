@@ -4,5 +4,22 @@
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/jakc_redemption" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/jakc_redemption_customer_coupon/security" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/Update 12092015/jakc_redemption_customer_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/Update 12092015/jakc_redemption_schemas_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/Update 12092015/jakc_redemption_trans_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_customer_coupon_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_customer_coupon_ec/security" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_customer_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_customer_point_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_point_adjustment_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_reward_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_schemas_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_tenant_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_trans_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakc_redemption_trans_rule_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakcaddons/jakc_redemption_customer_coupon/security" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/jakcaddons/jakc_redemption_point_adjustment/jakc_redemption_customer_coupon_ec" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/rdm_200-1/php_rdm_web_access" vcs="Git" />
   </component>
 </project>

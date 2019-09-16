@@ -82,22 +82,8 @@
                     <field name="state"/>
                 </search>
             </field>
-        </record>           
-                                
-		<!--&lt;!&ndash; RDM/SEQUENCE &ndash;&gt;-->
-        <!--&lt;!&ndash; COUPON CODE &ndash;&gt;       -->
-        <!--<record id="sequence_type_rdm_customer_coupon" model="ir.sequence.type">-->
-            <!--<field name="name">Customer Coupon</field>-->
-            <!--<field name="code">rdm.customer.coupon.sequence</field>-->
-        <!--</record>-->
-        <!---->
-        <!--<record id="sequence_rdm_customer_coupon" model="ir.sequence">-->
-            <!--<field name="name">Customer Coupon</field>-->
-            <!--<field name="code">rdm.customer.coupon.sequence</field>-->
-            <!--<field name="padding" eval="10"/>-->
-            <!--<field name="number_increment">1</field>            -->
-        <!--</record>        -->
-                		                <!---->
+        </record>
+
         <!-- RDM/ACTION -->
         <!-- CUSTOMER COUPON -->
 		<record model="ir.actions.act_window" id="action_rdm_customer_coupon">

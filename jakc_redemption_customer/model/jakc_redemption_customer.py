@@ -418,7 +418,7 @@ class rdm_customer(models.Model):
     interest = fields.Many2one(comodel_name="rdm.customer.interest", string="Interest")
     ref_id = fields.Many2one(comodel_name="rdm.customer", string="Refferal")
     receive_email = fields.Boolean(string="Receive Email")
-    join_date = fields.Date(string="Join Date", default=fields.Datetime().now())
+    join_date = fields.Date(string="Join Date", default=lambda self: fields.datetime.now())
     re_registation = fields.Boolean(string="Re-registration", default=False)
     re_registration = fields.Boolean(string="Re-registration", readonly=True)
     state = fields.Selection(selection=AVAILABLE_STATES, string="Status", size=16, readonly=True, default="draft")

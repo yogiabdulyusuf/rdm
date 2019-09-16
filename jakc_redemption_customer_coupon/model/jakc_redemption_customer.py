@@ -12,7 +12,9 @@ class rdm_customer(models.Model):
     def get_coupons(self):
         total = 0
         for datas in self.customer_coupon_ids:
-            if datas.state == 'active' and datas.expired_date >= datetime.now():
+            _logger.info("DATE : " + datas.expired_date)
+            exp_date = fields.Datetime.from_string(datas.expired_date)
+            if datas.state == 'active' and exp_date >= datetime.now():
                 total = total + datas.coupon
         self.point = total
         _logger.info('Total Coupon : ' + str(total))

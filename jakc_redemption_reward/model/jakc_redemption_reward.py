@@ -247,7 +247,7 @@ class rdm_reward_trans(models.Model):
         else:
             return False
 
-    @api.one
+
     def allow_redeem_reward(self, customer_id, reward_id):
 
         reward_limit_count_config_ids = self.env.user.company_id.reward_limit_count

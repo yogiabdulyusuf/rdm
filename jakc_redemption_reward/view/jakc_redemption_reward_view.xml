@@ -249,8 +249,19 @@
             <field name="name">Reward Transaction</field>
             <field name="res_model">rdm.reward.trans</field>
 			<field name="context">{'search_default_status_open':1}</field>            
-            <field name="view_mode">tree,form</field>
-        </record>		        
+            <field name="view_mode">tree,form,pivot</field>
+        </record>
+
+		<record model="ir.ui.view" id="pivot_rdm_reward_trans">
+            <field name="name">rdm.reward.trans.pivot</field>
+            <field name="model">rdm.reward.trans</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot">
+                    <field name="reward_id" type="row"/>
+                    <field name="state" type="col"/>
+               </pivot>
+            </field>
+        </record>
                 		        
     </data>
 </odoo>

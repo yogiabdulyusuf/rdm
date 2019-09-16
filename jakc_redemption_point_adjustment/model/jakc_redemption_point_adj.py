@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from datetime import datetime
 from odoo.exceptions import ValidationError, Warning
 import logging
 
@@ -69,12 +70,13 @@ class rdm_point_adj(models.Model):
             _logger.info('End Point Adjustment')
 
 
-    trans_date = fields.Date('Date',readonly=True, default=fields.Datetime.now)
+    trans_date = fields.Date('Date',readonly=True, default=lambda self: fields.datetime.now())
     customer_id = fields.Many2one('rdm.customer','Customer', required=True)
     adjust_type = fields.Selection(AVAILABLE_ADJUST_TYPE,'Type',size=16, required=True, default="+")
     point = fields.Integer('Point',required=True, default=0)
     expired_date = fields.Date('Expired Date')
     printed = fields.Boolean('Printed',readonly=True, default=False)
+    info = fields.Text(string="Information", required=False, )
     state = fields.Selection(AVAILABLE_STATES,'Status',size=16,readonly=True, default="draft")
 
 

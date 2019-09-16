@@ -26,7 +26,8 @@
 		                	<field name="point"/>
 		                	<field name="expired_date" attrs="{'invisible':[('adjust_type','=','-')],'required':[('adjust_type','=','+')]}"/>        
 		                	<!-- <field name="state"/> -->
-		                	<field name="printed"/>                    
+		                	<field name="printed"/>
+                            <field name="info"/>
 		               </group>	
                    </sheet>                	                		                       		                	                
                 </form>

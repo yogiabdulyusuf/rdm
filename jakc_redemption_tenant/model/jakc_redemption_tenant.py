@@ -45,19 +45,19 @@ class rdm_tenant(models.Model):
     #     return self.trans_id
             
 
-    name = fields.Char("Name", size=200, required=True)
-    company = fields.Char("Company", size=200)
-    category =  fields.Many2one("rdm.tenant.category","Category", required=True)
-    grade =  fields.Many2one("rdm.tenant.grade","Grade", required=True)
+    name = fields.Char(string="Name", size=200, required=True)
+    company = fields.Char(string="Company", size=200)
+    category =  fields.Many2one(comodel_name="rdm.tenant.category", string="Category", required=True)
+    grade =  fields.Many2one(comodel_name="rdm.tenant.grade", string="Grade", required=True)
     participant =  fields.Selection(AVAILABLE_PARTICIPANT,"Participant Type",required=True, default="1")
-    location =  fields.Char("Location", size=10)
-    floor =  fields.Char("Floor", size=10)
-    number =  fields.Char("Number", size=10)
-    start_date =  fields.Date("Join Date", required=True, readonly=True, default=datetime.now())
-    end_date =  fields.Date("End Date")
-    customer_ids =  fields.One2many("rdm.customer","tenant_id","Contacts")
-    message_ids =  fields.One2many("rdm.tenant.message","tenant_id","Messages")
-    state =  fields.Selection(AVAILABLE_STATES,"Status",size=16, readonly=False, default="draft")
+    location =  fields.Char(string="Location", size=10)
+    floor =  fields.Char(string="Floor", size=10)
+    number =  fields.Char(string="Number", size=10)
+    start_date =  fields.Date(string="Join Date", required=True, readonly=True, default=lambda self: fields.datetime.now())
+    end_date =  fields.Date(string="End Date")
+    customer_ids = fields.One2many(comodel_name="rdm.customer", inverse_name="tenant_id", string="Contacts", required=False, )
+    message_ids = fields.One2many(comodel_name="rdm.tenant.message", inverse_name="tenant_id", string="Messages", required=False, )
+    state =  fields.Selection(AVAILABLE_STATES,string="Status",size=16, readonly=False, default="draft")
 
     @api.model
     def create(self, vals):
@@ -70,9 +70,9 @@ class rdm_tenant_message(models.Model):
     _rec_name = 'tenant_id'
     _description = "Redemption Tenant Message"
  
-    trans_date =  fields.Date("Date", required=True, default=fields.Datetime.now)
-    tenant_id =  fields.Many2one("rdm.tenant","Tenant",required=True)
-    customer_id =  fields.Many2one("rdm.customer","Contact",required=True)
-    subject =  fields.Char("Subject",size=50,required=True)      
-    message =  fields.Text("Message",required=True)
-    state =  fields.Selection([("open","Open"),("reply","Reply"),("done","Close")],"State", default="open")
+    trans_date =  fields.Date(string="Date", required=True, default=lambda self: fields.datetime.now())
+    tenant_id = fields.Many2one(comodel_name="rdm.tenant", string="Tenant", required=True, )
+    customer_id = fields.Many2one(comodel_name="rdm.customer", string="Contact", required=True, )
+    subject =  fields.Char(string="Subject",size=50,required=True)
+    message =  fields.Text(string="Message",required=True)
+    state =  fields.Selection([("open","Open"),("reply","Reply"),("done","Close")], string="State", default="open")

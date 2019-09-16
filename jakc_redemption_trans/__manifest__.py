@@ -5,7 +5,8 @@
     "category" : "Generic Modules/Redemption And Point Management",
     "depends" : ["base_setup","base","jakc_redemption","jakc_redemption_customer","jakc_redemption_customer_coupon","jakc_redemption_customer_point","jakc_redemption_tenant","jakc_redemption_trans_rule","jakc_redemption_schemas",],
     "init_xml" : [],
-    "data" : [              			   
+    "data" : [
+        "data/ir_sequence.xml",
         "view/jakc_redemption_trans_view.xml",
         "view/jakc_redemption_trans_menu.xml",
         "view/jakc_redemption_customer_view.xml",

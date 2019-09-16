@@ -73,13 +73,15 @@
             <field name="model">rdm.tenant.message</field>						
             <field name="type">form</field>						
             <field name="arch" type="xml">
-                <form string="Tenant Message">  
+                <form string="Tenant Message">
+                    <header>
+                        <field name="state" widget="statusbar" statusbar_visible="open,reply,done"/>
+                   </header>
                     <group colspan="4">                            
                         <field name="tenant_id"/>
                         <field name="customer_id"/>
                         <field name="subject"/>
-                        <field name="message"/>  
-                        <field name="state"/>                     
+                        <field name="message"/>
                     </group>
                 </form>
             </field>
@@ -95,11 +97,39 @@
                      <field name="customer_id"/>
                      <field name="subject"/>
                      <field name="message"/>  
-                     <field name="state"/>     
+                     <field name="state"/>
                 </tree>
             </field>
       	</record>
-                                                    
+
+        <!-- RDM/ACTION -->
+    	<!-- TENANT -->
+        <record model="ir.actions.act_window" id="action_rdm_tenant">
+            <field name="name">Tenant</field>
+            <field name="res_model">rdm.tenant</field>
+            <field name="view_mode">tree,form,pivot</field>
+    	</record>
+		
+		<!-- PIVOT TENANT -->
+		<record model="ir.ui.view" id="pivot_rdm_tenant">
+            <field name="name">rdm.tenant.pivot</field>
+            <field name="model">rdm.tenant</field>
+            <field name="arch" type="xml">
+                <pivot string="Pivot">
+					<field name="category" type="row"/>
+                    <field name="grade" type="col"/> 
+               </pivot>
+            </field>
+        </record>
+		<!-- END PIVOT TENANT -->
+		
+    	<!-- TENANT MESSAGE-->
+		<record model="ir.actions.act_window" id="action_rdm_tenant_message">
+            <field name="name">Tenant Message</field>
+            <field name="res_model">rdm.tenant.message</field>
+            <field name="view_mode">tree,form</field>
+    	</record>
+
 		<!--&lt;!&ndash; RDM/TENANT MESSAGE CATEGORY&ndash;&gt;		-->
         <!--<record model="ir.ui.view" id="view_rdm_tenant_message_category_form">-->
             <!--<field name="name">rdm.tenant.message.category.form</field>-->
@@ -124,21 +154,6 @@
                 <!--</tree>-->
             <!--</field>-->
         <!--</record>        -->
-                                
-   		<!-- RDM/ACTION -->
-    	<!-- TENANT -->
-		<record model="ir.actions.act_window" id="action_rdm_tenant">
-            <field name="name">Tenant</field>
-            <field name="res_model">rdm.tenant</field>
-            <field name="view_mode">tree,form</field>
-    	</record>
-    	
-    	<!-- TENANT MESSAGE-->
-		<record model="ir.actions.act_window" id="action_rdm_tenant_message">
-            <field name="name">Tenant Message</field>
-            <field name="res_model">rdm.tenant.message</field>
-            <field name="view_mode">tree,form</field>
-    	</record>    	
     	
 		<!-- TENANT MESSAGE CATEGORY-->
 		<!--<record model="ir.actions.act_window" id="action_rdm_tenant_message_category">-->

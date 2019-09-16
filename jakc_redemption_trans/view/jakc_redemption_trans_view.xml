@@ -271,27 +271,27 @@
             <!--<field name="name">Transaction Remption</field>-->
             <!--<field name="code">rdm.trans.redemption.sequence</field>-->
         <!--</record>-->
-        <!---->
+
         <!--<record id="sequence_rdm_trans_coupon" model="ir.sequence">-->
             <!--<field name="name">Transaction Redemption</field>-->
             <!--<field name="code">rdm.trans.redemption.sequence</field>-->
-			<!--<field name="prefix">RDM</field>            -->
+			<!--<field name="prefix">RDM%(year)s%(month)s</field>-->
             <!--<field name="padding" eval="10"/>-->
-            <!--<field name="number_increment">1</field>            -->
+            <!--<field name="number_increment">1</field>-->
         <!--</record>-->
-        <!---->
-		<!--&lt;!&ndash; POINT ID &ndash;&gt;	-->
+
+		<!-- POINT ID -->
         <!--<record id="sequence_type_rdm_trans_point" model="ir.sequence.type">-->
             <!--<field name="name">Transaction Point</field>-->
             <!--<field name="code">rdm.trans.point.sequence</field>-->
         <!--</record>-->
-        <!---->
+
         <!--<record id="sequence_rdm_trans_point" model="ir.sequence">-->
             <!--<field name="name">Transaction Point</field>-->
             <!--<field name="code">rdm.trans.point.sequence</field>-->
-			<!--<field name="prefix">POI</field>            -->
+			<!--<field name="prefix">POI%(year)s%(month)s</field>-->
             <!--<field name="padding" eval="10"/>-->
-            <!--<field name="number_increment">1</field>            -->
+            <!--<field name="number_increment">1</field>-->
         <!--</record>-->
                         
         <!-- RDM/ACTION -->

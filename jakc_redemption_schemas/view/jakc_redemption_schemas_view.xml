@@ -227,52 +227,61 @@
 	                       		<field name="description"/>
 		                        <field name="desc_email" widget="html"/>                        
 		                        <field name="desc_sms"/>                                                		                    	                       															
-							</group>                    
-							<group string="Additional Information" colspan="2">
-								<group>
-		         					<field name="start_date"/>
-				                    <field name="end_date"/>
-				                    <field name="last_redeem"/>
-				                    <field name="draw_date" attrs="{'invisible':[('type','=','point')]}"/>                        																																	
-								</group>
-								<group>
-								    <label for="max_spend" string="Max Spend Amount"/>
-			                        <div name="div_type">			                          									    	
-								    	<field class="oe_inline" name="max_spend_amount_global" nolabel="1"/>
-								    	<field class="oe_inline" name="max_spend_amount" nolabel="1"/>    			                          				                          	
-			                      	</div>                           
-								    <label for="max_coupon" string="Max Coupon #"/>
-			                        <div name="div_type">			                          									    	
-								    	<field class="oe_inline" name="max_coupon_global" nolabel="1"/>
-								    	<field class="oe_inline" name="max_coupon" nolabel="1"/>    			                          				                          	
-			                      	</div>                           
-								    <label for="max_point" string="Max Point #"/>
-			                        <div name="div_type">			                          									    	
-								    	<field class="oe_inline" name="max_point_global" nolabel="1"/>
-								    	<field class="oe_inline" name="max_point" nolabel="1"/>    			                          				                          	
-			                      	</div>                           
-			                        			                        			                      	
-									<field name="coupon_spend_amount" attrs="{'invisible':[('type','=','point')]}" />
-									<field name="limit_coupon"/>
-                                    <field name="limit_coupon_per_periode"/>
-									<field name="min_coupon"/>
-				                    <field name="point_spend_amount"/>
-				                    <field name="limit_point"/>
-                                    <field name="limit_point_per_periode"/>
-				                    <field name="min_point"/>
-				                    <field name="point_expired_date"/>
-				                    <field name="reward_spend_amount"/>
-				                    <field name="limit_reward"/>				                    				                    				                                        	                    	                         	                           														
-								</group>
-							</group>	
-							<group string="Receipt Header and Footer" colspan="4">
-	                        	<field name="receipt_header"/>
-	                        	<field name="receipt_footer"/>                        														
-							</group>						
-							<group string="State Information" colspan="4">
-								<field name="state"/>                     
-							</group>						                        	    	
-	                    </group>
+							</group>
+                        </group>
+                        <group string="Additional Information" colspan="2">
+                            <group>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                                <field name="last_redeem"/>
+                                <field name="draw_date" attrs="{'invisible':[('type','=','point')]}"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Coupon Information">
+                                <label for="max_spend" string="Max Spend Amount"/>
+                                <div name="div_type">
+                                    <field class="oe_inline" name="max_spend_amount_global" nolabel="1"/>
+                                    <field class="oe_inline" name="max_spend_amount" nolabel="1"/>
+                                </div>
+                                <label for="max_coupon" string="Max Coupon #"/>
+                                <div name="div_type">
+                                    <field class="oe_inline" name="max_coupon_global" nolabel="1"/>
+                                    <field class="oe_inline" name="max_coupon" nolabel="1"/>
+                                </div>
+                                <field name="coupon_spend_amount" attrs="{'invisible':[('type','=','point')]}" />
+                                <field name="limit_coupon"/>
+                                <field name="limit_coupon_per_periode"/>
+                                <field name="min_coupon"/>
+                            </group>
+                            <group string="Point Information">
+                                <label for="max_point" string="Max Point #"/>
+                                <div name="div_type">
+                                    <field class="oe_inline" name="max_point_global" nolabel="1"/>
+                                    <field class="oe_inline" name="max_point" nolabel="1"/>
+                                </div>
+                                <field name="point_spend_amount"/>
+                                <field name="limit_point"/>
+                                <field name="limit_point_per_periode"/>
+                                <field name="min_point"/>
+                                <field name="point_expired_date"/>
+                            </group>
+                        </group>
+                        <group>
+                            <group string="Reword Information">
+                                <field name="rdm_reward_ids"/>
+                                <field name="reward_spend_amount"/>
+                                <field name="limit_reward"/>
+                            </group>
+
+                        </group>
+                        <group string="Receipt Header and Footer" colspan="4">
+                                <field name="receipt_header"/>
+                                <field name="receipt_footer"/>
+                            </group>
+                        <group string="State Information" colspan="4">
+                            <field name="state"/>
+                        </group>
 	                    <notebook colspan="4">
 	                        <page string="Image">
 	                            <field name="image1" widget="image"/>                                
