@@ -2146,10 +2146,37 @@ class rdm_trans(models.Model):
                     raise ValidationError("Error Creating Customer point in _generate_point")
         _logger.info('End Generate Coupon')
 
-    # def _generate_reward(self, trans_id):
-    #     _logger.info('Start Generate Reward')
-    #     pass
-    #     _logger.info('End Generate Reward')
+		
+    @api.one
+    def _generate_reward(self):
+        _logger.info('Start Generate reward')
+        # trans = self._get_trans(trans_id, context)
+        for trans in self:
+
+            self.env['rdm.reward.trans']._generate_reward(trans)
+
+            # trans_schemas_ids = trans.trans_schemas_ids.schemas_id
+            # if trans_schemas_ids.rdm_reward_ids:
+            #     if trans.total_amount >= trans_schemas_ids.reward_spend_amount:
+            #         vals = {}
+            #         vals.update({'customer_id': trans.customer_id.id})
+            #         vals.update({'trans_id': trans.id})
+            #         vals.update({'reward_id': trans_schemas_ids.rdm_reward_ids.id})
+            #         vals.update({'point': 0})
+            #         vals.update({'type': 'promo'})
+            #         vals.update({'state': 'done'})
+            #         customer_reward_obj = self.env['rdm.reward.trans'].create(vals)
+            #         if not customer_reward_obj:
+			# 			raise ValidationError("Error Creating Customer reward in _generate_reward")
+            #
+            #         _logger.info('ID RDM REWARD TRANS : ' + str(customer_reward_obj.id))
+            #         _logger.info('ID RDM REWARD TRANS : ' + str(customer_reward_obj))
+            #
+            #         rdm_trans_datas = {}
+            #         rdm_trans_datas.update({'customer_reward_ids': customer_reward_obj})
+            #         self.write(rdm_trans_datas)
+
+        _logger.info('End Generate reward')
 
     @api.one
     def _define_trans_schemas(self):
@@ -2215,6 +2242,8 @@ class rdm_trans(models.Model):
         self._generate_coupon()
         #Generate Point
         self._generate_point()
+        # Generate Point
+        self._generate_reward()
         #Send Email Notification
 
 
@@ -2492,6 +2521,7 @@ class rdm_trans(models.Model):
         for trans in self:
             if trans.state == 'done':
                 _logger.info('State : Done')
+                _logger.info('BYPASSS : ' + str(vals.get('bypass')))
                 if vals.get('bypass') == True:
                     _logger.info('Bypass Done State')
                     trans_data = {}
@@ -2506,7 +2536,7 @@ class rdm_trans(models.Model):
                         id = super(rdm_trans, self).write(trans_data)
                         self.process_req_delete()
                 else:
-                    raise ValidationError('Edit not allowed, Transaction already closed!')
+                    raise ValidationError('Edit not allowed, Transaction already closed! rdm_trans')
 
             if trans.state == 'open':
                 _logger.info('State : Open')

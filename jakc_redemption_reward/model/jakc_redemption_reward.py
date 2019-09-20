@@ -17,6 +17,7 @@ AVAILABLE_STATES = [
 AVAILABLE_TYPE = [
     ('goods','Goods'),
     ('coupon','Coupon'),
+    # ('voucher', 'Voucher'),
 ]
 
 AVAILABLE_VOUCHER_STATES = [
@@ -67,6 +68,13 @@ class rdm_reward(models.Model):
             total_stock = total_stock_ids
             total_booking = total_booking_ids
             total_usage = total_usage_ids
+        # if self.type == 'voucher':
+        #     total_stock_ids = self.env['rdm.reward.voucher'].get_stock(self.id)
+        #     total_booking_ids = self.env['rdm.reward.trans'].get_reward_booking(self.id)
+        #     total_usage_ids = self.env['rdm.reward.trans'].get_reward_usage(self.id)
+        #     total_stock = total_stock_ids
+        #     total_booking = total_booking_ids
+        #     total_usage = total_usage_ids
 
         _logger.info('Get Stock')
         _logger.info(total_stock)
@@ -127,6 +135,7 @@ class rdm_reward(models.Model):
     goods_ids = fields.One2many('rdm.reward.goods', 'reward_id', string='Goods')
     coupon_ids = fields.One2many('rdm.reward.coupon', 'reward_id', string='Coupon')
     voucher_ids = fields.One2many('rdm.reward.voucher', 'reward_id', string='Voucher')
+    info = fields.Text(string="Information", required=False, )
     state = fields.Selection(AVAILABLE_STATES, string='Status',size=16, readonly=True, default='draft')
 
 
@@ -163,7 +172,7 @@ class rdm_reward_coupon(models.Model):
     def get_stock(self, reward_id):
         _logger.info('Start Get Coupon Stocks')
         total_stock = 0
-        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id='" + reward_id + "'"
+        sql_req= "SELECT sum(stock) as total FROM rdm_reward_coupon WHERE reward_id='" + str(reward_id) + "'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
 
@@ -186,7 +195,8 @@ class rdm_reward_voucher(models.Model):
     def get_stock(self, reward_id):
         _logger.info('Start Get Voucher Stocks')     
         total_stock = 0        
-        sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id='" + reward_id + "' AND state='open'"
+        # sql_req= "SELECT count(*) as total FROM rdm_reward_voucher WHERE reward_id='" + reward_id + "' AND state='open'"
+        sql_req= "SELECT sum(stock) as total FROM rdm_reward_voucher WHERE reward_id='" + str(reward_id) + "' AND state='open'"
         self.env.cr.execute(sql_req)
         sql_res = self.env.cr.dictfetchone()
         if sql_res:
@@ -198,7 +208,8 @@ class rdm_reward_voucher(models.Model):
     
     reward_id = fields.Many2one('rdm.reward','Reward', readonly=True)
     trans_date = fields.Date('Transaction Date', default=fields.Date.today())
-    voucher_no = fields.Char('Voucher #', size=15)
+    stock = fields.Integer(string='Stock')
+    # voucher_no = fields.Char('Voucher #', size=15)
     state = fields.Selection(AVAILABLE_VOUCHER_STATES,'Status',size=16, readonly=True, default='open')
 
 
@@ -242,7 +253,7 @@ class rdm_reward_trans(models.Model):
     @api.one
     def check_reward_stock(self, reward_id):
         reward = self.env['rdm.reward'].search([('reward_trans_ids', '=', reward_id),])
-        if reward.stock > 0:
+        if reward.stock >= 0:
             return True
         else:
             return False
@@ -380,7 +391,7 @@ class rdm_reward_trans(models.Model):
         _logger.info('Start Get Reward Usage')
         total = 0
 
-        args = [("reward_id","=", reward_id),("state","=",'open')]
+        args = [("reward_id","=", reward_id),("state","=",'done')]
         datas_count = self.env["rdm.reward.trans"].search_count(args)
         if datas_count is not None:
             total = datas_count
@@ -477,6 +488,32 @@ class rdm_reward_trans(models.Model):
             coupon_data.update({'expired_date': datetime.now()})
             self.env['rdm.customer.coupon'].create(coupon_data)
             _logger.info('End Generate Coupon')
+
+    @api.one
+    def _generate_reward(self, vals):
+        _logger.info('Start Generate reward')
+        # trans = self._get_trans(trans_id, context)
+        for trans in vals:
+            trans_schemas_ids = trans.trans_schemas_ids.schemas_id
+            if trans_schemas_ids.rdm_reward_ids:
+                if trans.total_amount >= trans_schemas_ids.reward_spend_amount:
+                    vals = {}
+                    vals.update({'customer_id': trans.customer_id.id})
+                    vals.update({'trans_id': trans.id})
+                    vals.update({'reward_id': trans_schemas_ids.rdm_reward_ids.id})
+                    vals.update({'point': 0})
+                    vals.update({'type': 'promo'})
+                    vals.update({'state': 'done'})
+                    customer_reward_obj = self.env['rdm.reward.trans'].create(vals)
+                    if not customer_reward_obj:
+                        raise ValidationError("Error Creating Customer reward in _generate_reward")
+
+                    _logger.info('ID RDM REWARD TRANS : ' + str(customer_reward_obj.id))
+                    _logger.info('ID RDM REWARD TRANS : ' + str(customer_reward_obj))
+
+                    return customer_reward_obj
+
+        _logger.info('End Generate reward')
     
     @api.one
     def trans_print(self):
@@ -515,39 +552,55 @@ class rdm_reward_trans(models.Model):
     printed = fields.Boolean('Printed', readonly=True, default=False)
     re_print = fields.Integer('Re-Print')
     re_print_remarks = fields.Text('Re-print Remarks')
+    type = fields.Selection([('promo', 'Promo'), ('reward', 'Reward')], string="Type", required=True, default="reward")
     state = fields.Selection(AVAILABLE_STATES, 'Status', size=16, readonly=True, default='draft')
 
     @api.model
     def create(self, vals):
         # customer_id = vals.get('customer_id')
         # reward_id = vals.get('reward_id')
-    
-        reward_stock = self.check_reward_stock(self.reward_id.id)
+
+        _logger.info('CUSTOMER ID : ' + str(vals.get('customer_id')))
+        _logger.info('REWAWRD ID : ' + str(vals.get('reward_id')))
+
+        customer_id_id = vals.get('customer_id')
+        reward_id_id = vals.get('reward_id')
+        trans_id_id = vals.get('trans_id')
+
+        # reward_stock = self.check_reward_stock(self.reward_id.id)
+        reward_stock = self.check_reward_stock(reward_id_id)
         _logger.info("Reward Stock : " + str(reward_stock))
         if reward_stock == False:
             raise ValidationError('Reward has no stock')
     
-        check_reward_limit_count  = self.check_reward_limit_count(self.customer_id.id, self.reward_id.id)
+        # check_reward_limit_count  = self.check_reward_limit_count(self.customer_id.id, self.reward_id.id)
+        check_reward_limit_count  = self.check_reward_limit_count(customer_id_id, reward_id_id)
         if check_reward_limit_count == False:
             raise ValidationError('Reward Limit Count Applied')
     
-        allow_redeem_reward = self.allow_redeem_reward(self.customer_id.id, self.reward_id.id)
+        # allow_redeem_reward = self.allow_redeem_reward(self.customer_id.id, self.reward_id.id)
+        allow_redeem_reward = self.allow_redeem_reward(customer_id_id, reward_id_id)
         if allow_redeem_reward == False:
             raise ValidationError('Redeem Limit Applied')
     
-        customer_id = self.env['rdm.customer'].browse(self.customer_id.id)
-        reward = self._get_reward(self.reward_id.id)
+        customer_id = self.env['rdm.customer'].browse(customer_id_id)
+        reward = self._get_reward(reward_id_id)
 
         if customer_id.point < reward.point:
             raise ValidationError('Point not enough')
-    
-        vals.update({'point': reward.point})
-        vals.update({'state':'open'})
+
+        # if vals.get('type') == 'promo':
+        #     vals.update({'state': 'done'})
+
+        if vals.get('type') == 'reward':
+            vals.update({'point': reward.point})
+            vals.update({'state':'open'})
+
         trans_id = super(rdm_reward_trans,self).create(vals)
         trans_id.onchange_reward_id()
         if vals.get('is_booking') == True:
             point = vals.get('point')
-            self.env['rdm.customer.point'].deduct_point(self.trans_id.id, self.customer_id.id, point)
+            self.env['rdm.customer.point'].deduct_point(trans_id_id, customer_id_id, point)
             self._send_booking_notitication_to_customer()
         return trans_id
     
@@ -556,6 +609,7 @@ class rdm_reward_trans(models.Model):
         for trans in self:
             if trans.state == 'done':
                 #Modify Closed Transaction
+                _logger.info('BYPASS REWARD : ' + str(values.get('bypass')))
                 if values.get('bypass') == True:
                     trans_data = {}
                     if values.get('method') == 'trans_reset':
@@ -564,7 +618,7 @@ class rdm_reward_trans(models.Model):
                         trans_data.update({'printed': values.get('printed')})
                     result = super(rdm_reward_trans,self).write(trans_data)
                 else:
-                    raise ValidationError('Edit not allowed, Transaction already closed!')
+                    raise ValidationError('Edit not allowed, Transaction already closed! rdm_reward_trans')
             else:
                 #Close Transaction
                 if values.get('state') == 'done':
